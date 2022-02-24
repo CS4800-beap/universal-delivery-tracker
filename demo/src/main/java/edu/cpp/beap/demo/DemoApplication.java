@@ -30,4 +30,9 @@ public class DemoApplication {
 	return String.format("This will be our login page");
 	}
 
+	@GetMapping("/signup")
+	public String signUp() {
+	return String.format("This will be our signup page");
+	}
+
 }
