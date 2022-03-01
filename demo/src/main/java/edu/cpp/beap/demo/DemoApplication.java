@@ -19,12 +19,6 @@ public class DemoApplication {
 	return "Hello BEAP";
 	}
 	
-	@GetMapping("/greet")
-	public String greet(@RequestParam(value = "name", defaultValue = "User") String name) {
-	return String.format("Greetings %s!", name);
-	}
-	
-	
 	@GetMapping("/login")
 	public String login() {
 	return String.format("This will be our login page");
@@ -35,4 +29,8 @@ public class DemoApplication {
 	return String.format("This will be our signup page");
 	}
 
+	@GetMapping("/guava_test")
+	public String greet(@RequestParam(value = "text", defaultValue = "text ") String text, @RequestParam(value = "repeat", defaultValue = "3") String repeat) {
+		return GuavaTest.createStrings(text, repeat);
+	}
 }
