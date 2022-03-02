@@ -7,10 +7,10 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
 
-@Configuration
-@ComponentScan("com.baeldung.jdbc")
+// @Configuration
+// @ComponentScan("com.baeldung.jdbc")
 public class SpringJDBCConfig {
-    @Bean
+    // @Bean
     public DataSource mysqlDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
