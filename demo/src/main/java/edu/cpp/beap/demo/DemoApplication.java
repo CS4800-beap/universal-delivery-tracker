@@ -30,7 +30,12 @@ public class DemoApplication {
 	}
 
 	@GetMapping("/guava_test")
-	public String greet(@RequestParam(value = "text", defaultValue = "text ") String text, @RequestParam(value = "repeat", defaultValue = "3") String repeat) {
+	public String guavaTest(@RequestParam(value = "text", defaultValue = "text ") String text, @RequestParam(value = "repeat", defaultValue = "3") String repeat) {
 		return GuavaTest.createStrings(text, repeat);
+	}
+
+	@GetMapping("/gson_test")
+	public String gsonTest() {
+		return GsonTest.createJsonString();
 	}
 }
