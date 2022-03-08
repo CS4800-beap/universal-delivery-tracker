@@ -1,6 +1,7 @@
 package edu.cpp.beap.demo.calculator;
 
 import org.junit.*;
+import org.junit.jupiter.api.Test;
 
 public class CalculatorTest {
 	
