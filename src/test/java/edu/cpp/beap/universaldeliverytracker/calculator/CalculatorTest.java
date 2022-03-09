@@ -1,7 +1,9 @@
-package edu.cpp.beap.demo.calculator;
+package edu.cpp.beap.universaldeliverytracker.calculator;
 
 import org.junit.*;
 import org.junit.jupiter.api.Test;
+
+import edu.cpp.beap.universaldeliverytracker.calculator.Calculator;
 
 public class CalculatorTest {
 	
