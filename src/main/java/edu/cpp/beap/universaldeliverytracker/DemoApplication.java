@@ -1,4 +1,4 @@
-package edu.cpp.beap.demo;
+package edu.cpp.beap.universaldeliverytracker;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

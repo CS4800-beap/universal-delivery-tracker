@@ -1,4 +1,4 @@
-package edu.cpp.beap.demo;
+package edu.cpp.beap.universaldeliverytracker;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
