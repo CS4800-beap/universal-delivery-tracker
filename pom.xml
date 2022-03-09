@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>edu.cpp.beap</groupId>
-	<artifactId>demo</artifactId>
+	<artifactId>universal-delivery-tracker</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
-	<description>Demo project for Spring Boot in beap</description>
+	<name>universal-delivery-tracker</name>
+	<description>A package tracking web application with support for multiple couriers.</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
