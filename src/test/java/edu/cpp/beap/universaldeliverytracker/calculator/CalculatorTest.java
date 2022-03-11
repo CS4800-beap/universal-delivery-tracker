@@ -18,4 +18,11 @@ public class CalculatorTest {
 		int res = c.add(-10,-20);
 		Assert.assertEquals(-30, res);
 	}
+
+	@Test
+	public void testAdd3() {
+		Calculator c = new Calculator();
+		int res = c.add(-10, 20);
+		Assert.assertEquals(10, res);
+	}
 }
