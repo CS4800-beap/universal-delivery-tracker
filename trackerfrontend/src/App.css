@@ -2,12 +2,6 @@
   text-align: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -19,19 +13,46 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.Input-div {
+  vertical-align: middle;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.Tracking-number {
+  font-size: 17pt;
 }
 
-.trackingInputNumber {
-  font-size: 50pt;
+.Tracking-number-input {
+  font-size: 15pt;
+  size: 30;
+  margin-left: 3vw;
+  margin-right: 3vw;
+  padding: .3em;
+}
+.Get-button {
+  background-color: #ff675a;
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+  text-decoration: none;
+  font-size: 15px;
+  height: 2em;
+  width: 10em;
+  border-radius: .5em;
+  border: none;
+}
+
+.Get-button:active {
+  transition-duration: 0.1s;
+  background-color: #ff7b5a;
+  top: 1px;
+}
+
+.Output-div {
+  text-align: left;
+  margin-top: 5vh;
+  width: 75%;
+}
+
+.Output-1 {
+  overflow-wrap: anywhere;
 }
