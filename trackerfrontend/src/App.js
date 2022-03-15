@@ -7,7 +7,7 @@ function App() {
   
   function handleGet(event) {
     event.preventDefault()
-    trackingNumber(input)
+    setTrackingNumber(input)
     console.log("Tracking Number: ", trackingNumber)
   }
 
