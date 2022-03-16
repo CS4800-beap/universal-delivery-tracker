@@ -1,8 +1,5 @@
-.App {
+.App-body {
   text-align: center;
-}
-
-.App-header {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -12,6 +9,24 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+
+nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-height:  10vh;
+  background: rgb(73, 79, 82);
+  color: white;
+}
+
+.nav-links {
+  width: 40%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  list-style: none;
+}
+
 
 .Input-div {
   vertical-align: middle;
