@@ -1,25 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import "../App.css";
 
 function Nav() {
 
-  const navStyle = {
-    color: 'white'
-  };
-
   return (
     <nav>
         <h3>Logo</h3>
-        <ul className="nav-links">
+        <ul className="Nav-items">
             <li>
-              <Link style={navStyle} to="/">Home</Link>
+              <Link className="Nav-item" to="/">Home</Link>
             </li>
             <li>
-              <Link style={navStyle} to="/about">About</Link>
+              <Link className="Nav-item" to="/about">About</Link>
             </li>
             <li>
-              <Link style={navStyle} to="/signin">Signin</Link>
+              <Link className="Nav-item" to="/signin">Signin</Link>
             </li>
         </ul>
     </nav>

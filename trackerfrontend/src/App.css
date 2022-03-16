@@ -19,7 +19,7 @@ nav {
   color: white;
 }
 
-.nav-links {
+.Nav-items {
   width: 40%;
   display: flex;
   justify-content: space-around;
@@ -27,6 +27,10 @@ nav {
   list-style: none;
 }
 
+.Nav-item {
+  color: white;
+  text-decoration: none;
+}
 
 .Input-div {
   vertical-align: middle;
