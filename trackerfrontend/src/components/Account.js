@@ -1,14 +1,14 @@
 import React from "react";
 import "../App.css";
 
-function Signin() {
+function Account() {
   return (
     <body className="App-body">
         <h1>
-            Signin Page
+            Account Page
         </h1>
     </body>
   );
 };
 
-export default Signin;
+export default Account;

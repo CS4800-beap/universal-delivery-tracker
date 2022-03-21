@@ -5,7 +5,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: first baseline;
+  margin-top: 20vh;
   font-size: calc(10px + 2vmin);
   color: white;
 }
@@ -20,7 +21,7 @@ nav {
 }
 
 .Nav-items {
-  width: 40%;
+  width: 30%;
   display: flex;
   justify-content: space-around;
   align-items: center;
