@@ -55,8 +55,10 @@ nav {
   text-align: center;
   text-decoration: none;
   font-size: 15px;
-  height: 2em;
-  width: 10em;
+  font-weight: bold;
+  height: fit-content;
+  width: fit-content;
+  padding: 10px;
   border-radius: .5em;
   border: none;
 }
