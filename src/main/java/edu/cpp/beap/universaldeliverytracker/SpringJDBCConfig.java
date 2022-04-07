@@ -13,7 +13,7 @@ public class SpringJDBCConfig {
     @Bean
     public DataSource mysqlDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUrl("test-db-beap.cluster-cgfusvr9kj7y.us-east-1.rds.amazonaws.com");
         dataSource.setUsername("beap_admin");
         dataSource.setPassword("tkPE^q^ZulD$");
