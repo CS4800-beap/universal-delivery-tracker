@@ -4,21 +4,41 @@ import "../App.css";
 function Home() {
 
   const [trackingNumber, setInput] = useState("");
-  const [DHLResponse, setDHLResponse] = useState("");
+  const [courier, setCourier] = useState("");
+  const [TrackingResponse, setTrackingResponse] = useState("");
   
-  function getDHLTracking(event) {
+  // Get tracking information
+  function getTracking(event) {
     event.preventDefault()
-    console.log("DHL Tracking Number: ", trackingNumber)
+    console.log("Tracking Number: ", trackingNumber)
 
-    const options = {method: 'GET', headers: {'DHL-API-Key': process.env.REACT_APP_DHL_API_KEY}};
+    /*
+    Identify courier based on tracking number format
 
-    fetch(`https://api-eu.dhl.com/track/shipments?trackingNumber=${trackingNumber}`, options)
-      .then(response => response.json())
-      .then(response => {
-        console.log(response)
-        setDHLResponse(JSON.stringify(response))
-      })
-      .catch(err => console.error(err));
+    DHL:
+      - Source: https://www.trackingmore.com/tracking-status-detail-en-237.html
+      - 9-10 digits: 7777777770
+      - JD + 18 digits: JD000000000000000000
+      - JJD + 16 digits: JJD0000000000000000
+     */
+    if (((trackingNumber.length === 9 || trackingNumber.length === 10) && /^[0-9]+$/.test(trackingNumber)) ||
+        (trackingNumber.substring(0, 2) === "JD" && trackingNumber.substring(2).length === 18) ||
+         (trackingNumber.substring(0, 3) === "JJD" && trackingNumber.substring(3).length === 16)) {
+          setCourier("DHL");
+
+          // Send HTTP GET request to DHL's track/shipments API endpoint with the user's tracking number
+          fetch(`https://api-eu.dhl.com/track/shipments?trackingNumber=${trackingNumber}`,{
+              method: 'GET', headers: {'DHL-API-Key': process.env.REACT_APP_DHL_API_KEY}
+            })
+            .then(response => response.json())
+            .then(response => {
+              setTrackingResponse(JSON.stringify(response))
+            })
+            .catch(err => console.error(err));
+    } else {
+      setCourier("The tracking number you have entered is currently not supported.");
+      setTrackingResponse();
+    }
   }
 
   return (
@@ -26,12 +46,16 @@ function Home() {
       <div className="Input-div">
         <label className="Tracking-number">Tracking Number:</label>
         <input className="Tracking-number-input" type="text" value={trackingNumber} onInput={(e) => setInput(e.target.value)}></input>
-        <button className="Get-button" onClick={getDHLTracking}>Get Tracking Status</button>
+        <button className="Get-button" onClick={getTracking}>Get Tracking Status</button>
+      </div>
+
+      <div className="Output-div">
+        <p className="Output-courier">Courier: {courier}</p>
       </div>
       
       <div className="Output-div">
         <p className="Output-1">Output:</p>
-        <p className="Output-1">{DHLResponse}</p>
+        <p className="Output-1">{TrackingResponse}</p>
       </div>
     </body>
   );
