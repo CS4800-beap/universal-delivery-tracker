@@ -3,11 +3,11 @@ import "../App.css";
 
 function About() {
   return (
-    <body className="App-body">
+    <div className="App-body">
         <h1>
             About Page
         </h1>
-    </body>
+    </div>
   );
 };
 

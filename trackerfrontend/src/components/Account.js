@@ -9,7 +9,7 @@ function Account() {
   const toSignup = useCallback(() => navigate('/account/signup', {replace: false}), [navigate]);
 
   return (
-    <body className="App-body">
+    <div className="App-body">
         <h1>
             Account Page
         </h1>
@@ -19,7 +19,7 @@ function Account() {
         <button onClick={toSignup} style={{margin: '1vh'}}>
             to signup page
         </button>
-    </body>
+    </div>
   );
 };
 

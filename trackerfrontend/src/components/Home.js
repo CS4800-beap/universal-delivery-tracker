@@ -3,7 +3,7 @@ import "../App.css";
 
 function Home() {
 
-  const [trackingNumber, setInput] = useState("");
+  const [trackingNumber, setTrackingNumber] = useState("");
   const [courier, setCourier] = useState("");
   const [TrackingResponse, setTrackingResponse] = useState("");
   
@@ -42,10 +42,13 @@ function Home() {
   }
 
   return (
-    <body className="App-body">
+    <div className="App-body">
+
+      <div style={{height: 200}}></div> {/* Temporary buffer space */}
+
       <div className="Input-div">
         <label className="Tracking-number">Tracking Number:</label>
-        <input className="Tracking-number-input" type="text" value={trackingNumber} onInput={(e) => setInput(e.target.value)}></input>
+        <input className="Tracking-number-input" type="text" value={trackingNumber} onInput={(e) => setTrackingNumber(e.target.value)}></input>
         <button className="Get-button" onClick={getTracking}>Get Tracking Status</button>
       </div>
 
@@ -57,7 +60,7 @@ function Home() {
         <p className="Output-1">Output:</p>
         <p className="Output-1">{TrackingResponse}</p>
       </div>
-    </body>
+    </div>
   );
 };
 

@@ -6,7 +6,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: first baseline;
-  margin-top: 20vh;
+  margin-top: 5vh;
   font-size: calc(10px + 2vmin);
   color: white;
 }
@@ -92,6 +92,21 @@ nav {
   height: 100%;
   position: relative;
   
+}
+
+.Form button {
+  background: #ff675a;
+  border: 0;
+  width: 80%;
+  font-size: 16px;
+  padding: 1vh;
+  border-radius: 7px;
+}
+
+.Form button:active {
+  transition-duration: 0.1s;
+  background-color: #ff7b5a;
+  top: 1px;
 }
 
 .Form-control {
