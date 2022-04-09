@@ -10,14 +10,26 @@ import javax.sql.DataSource;
 @Configuration
 @ComponentScan("com.baeldung.jdbc")
 public class SpringJDBCConfig {
-    @Bean
-    public DataSource mysqlDataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("test-db-beap.cluster-cgfusvr9kj7y.us-east-1.rds.amazonaws.com");
-        dataSource.setUsername("beap_admin");
-        dataSource.setPassword("tkPE^q^ZulD$");
 
+    private static DriverManagerDataSource dataSource = null;
+
+    public SpringJDBCConfig(){
+
+    }
+
+    private static void establishConnection(){
+        dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        dataSource.setUrl("jdbc:mysql://beapdb-instance-1.cgfusvr9kj7y.us-east-1.rds.amazonaws.com/BEAP");
+        dataSource.setUsername("beapadmin");
+        dataSource.setPassword("Zv-#9{M>6x");
+    }
+
+    @Bean
+    public static DataSource getMysqlDataSource() {
+        if(dataSource == null){
+            establishConnection();
+        }
         return dataSource;
     }
 }
