@@ -8,6 +8,11 @@ function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const [checked, setChecked] = React.useState(false);
+    const handleChange = () => {
+        setChecked(!checked);
+    };
+
     // Handle log in
     function login() {
         axios.get("http://localhost:8080/login?emailid=" + email + "&password=" + password)
@@ -29,6 +34,11 @@ function Login() {
                     <input className="Form-control" name="wenben" type="text" placeholder={'password'} value={password} onInput={(e) => setPassword(e.target.value)}/>
 
                     <button onClick={login}>Log in</button>
+
+                    <div>
+                        <p style={{display: 'inline-block', fontSize: 18, marginRight: 7}}>Remember Me </p>
+                        <input type="checkbox" checked={checked} onChange={handleChange} />
+                    </div>
 
                     <p style={{fontSize: 18}}>Don't have an account? <Link to='/account/signup' style={{color: "white"}}>Sign up</Link></p>
              

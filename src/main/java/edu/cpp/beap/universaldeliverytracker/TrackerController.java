@@ -12,7 +12,12 @@ public class TrackerController {
     @GetMapping("/login")
     public String login(@RequestParam(value = "emailid") String emailid,@RequestParam(value = "password") String password){
         AccountManager accountManager = AccountManager.getAccountManager();
-        accountManager.createNewAccount("randUser" + System.currentTimeMillis(), emailid, password, "fakefirstname", "fakelastname");
+        try {
+            accountManager.login(emailid, password);
+        }
+        catch(Exception e){
+            return e.getMessage();
+        }
         return "";
     }
 }
