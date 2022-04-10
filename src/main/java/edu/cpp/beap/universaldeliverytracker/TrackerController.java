@@ -27,8 +27,8 @@ public class TrackerController {
 
         
         // Temporary return to test API call
-        return emailid + " " + password + " " + fname + " " + lname;
+        return "Email: " + emailid + ", Password: " + password + ", First Name: " + fname + ", Last Name: " + lname;
         
-        // return "true"; // Login was successful
+        // return "true"; // Signup was successful
     }
 }

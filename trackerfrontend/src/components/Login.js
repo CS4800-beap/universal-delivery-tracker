@@ -43,7 +43,7 @@ function Login() {
             <div className="Form-container">
                 <div className="Form">
                     <input className="Form-control" name="wenben" type="text" placeholder={'email'} value={email} onInput={(e) => setEmail(e.target.value)}/>
-                    <input className="Form-control" name="wenben" type="text" placeholder={'password'} value={password} onInput={(e) => setPassword(e.target.value)}/>
+                    <input className="Form-control" name="wenben" type="password" placeholder={'password'} value={password} onInput={(e) => setPassword(e.target.value)}/>
 
                     <button onClick={login}>Log in</button>
 

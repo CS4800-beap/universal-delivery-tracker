@@ -30,19 +30,24 @@ function Signup() {
         console.log("Confirm Password: ", confirmPassword)
         console.log("Remember me?:", checked)
         */
-        
-        axios.get("http://localhost:8080/signup?emailid=" + email + "&password=" + password + "&fname=" + firstName + "&lname=" + lastName)
-            .then(function(response) {
-                console.log(response.data)
-                if (response.data == true) {
-                    toAccount()
-                } else {
-                    // Temporary alert
-                    alert("Failed to create account")
-                }
-            }).catch (error => {
-                console.log(error.response.data.error);
-            })
+
+        if (password != confirmPassword) {
+            // Temporary alert
+            alert("Passwords do not match")
+        } else {
+            axios.get("http://localhost:8080/signup?emailid=" + email + "&password=" + password + "&fname=" + firstName + "&lname=" + lastName)
+                .then(function(response) {
+                    console.log(response.data)
+                    if (response.data == true) {
+                        toAccount()
+                    } else {
+                        // Temporary alert
+                        alert("Failed to create account")
+                    }
+                }).catch (error => {
+                    console.log(error.response.data.error);
+                })
+        }
     }
 
     return(
@@ -55,8 +60,8 @@ function Signup() {
                     <input className="Form-control" name="wenben" type="text" placeholder={'first name'} value={firstName} onInput={(e) => setFirstName(e.target.value)}/>
                     <input className="Form-control" name="wenben" type="text" placeholder={'last name'} value={lastName} onInput={(e) => setLastName(e.target.value)}/>
                     <input className="Form-control" name="wenben" type="text" placeholder={'email'} value={email} onInput={(e) => setEmail(e.target.value)}/>
-                    <input className="Form-control" name="wenben" type="text" placeholder={'password'} value={password} onInput={(e) => setPassword(e.target.value)}/>
-                    <input className="Form-control" name="wenben" type="text" placeholder={'confirm password'} value={confirmPassword} onInput={(e) => setConfirmPassword(e.target.value)}/>
+                    <input className="Form-control" name="wenben" type="password" placeholder={'password'} value={password} onInput={(e) => setPassword(e.target.value)}/>
+                    <input className="Form-control" name="wenben" type="password" placeholder={'confirm password'} value={confirmPassword} onInput={(e) => setConfirmPassword(e.target.value)}/>
 
                     <button onClick={signup}>Sign up</button>
                     
