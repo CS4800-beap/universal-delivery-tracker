@@ -16,10 +16,8 @@ function Login() {
     // Handle log in
     function login() {
         axios.get("http://localhost:8080/login?emailid=" + email + "&password=" + password)
-                    .then(function(response) {
-                    }).catch (error => {
-                                      console.log(error.response.data.error);
-                                  })
+            .then(response => console.log(response))
+            .catch (error => console.error(error))
     }
 
     return(
