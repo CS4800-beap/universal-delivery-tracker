@@ -1,4 +1,4 @@
-package edu.cpp.beap.universaldeliverytracker;
+package accounts;
 
 import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;

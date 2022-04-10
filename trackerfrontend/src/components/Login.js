@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import "../App.css";
 
 function Login() {
@@ -14,8 +15,11 @@ function Login() {
 
     // Handle log in
     function login() {
-        console.log("Email: ", email)
-        console.log("Password: ", password)
+        axios.get("http://localhost:8080/login?emailid=" + email + "&password=" + password)
+                    .then(function(response) {
+                    }).catch (error => {
+                                      console.log(error.response.data.error);
+                                  })
     }
 
     return(
@@ -35,7 +39,6 @@ function Login() {
                         <p style={{display: 'inline-block', fontSize: 18, marginRight: 7}}>Remember Me </p>
                         <input type="checkbox" checked={checked} onChange={handleChange} />
                     </div>
-                    
 
                     <p style={{fontSize: 18}}>Don't have an account? <Link to='/account/signup' style={{color: "white"}}>Sign up</Link></p>
              
