@@ -5,22 +5,25 @@ import "../App.css";
 function Account() {
 
   const navigate = useNavigate();
-  const toLogin = useCallback(() => navigate('/account/login', {replace: false}), [navigate]);
-  const toSignup = useCallback(() => navigate('/account/signup', {replace: false}), [navigate]);
+  const toLogin = useCallback(() => navigate('/login', {replace: false}), [navigate]);
 
   return (
     <div className="App-body">
         <h1>
             Account Page
         </h1>
+
+        <div>
+            Account contents
+        </div>
+
         <button onClick={toLogin} style={{margin: '1vh'}}>
-            to login page
-        </button>
-        <button onClick={toSignup} style={{margin: '1vh'}}>
-            to signup page
+            back to login page
         </button>
     </div>
   );
+
+  
 };
 
 export default Account;

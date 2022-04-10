@@ -15,7 +15,7 @@ function Nav() {
               <Link className="Nav-item" to="/about">About</Link>
             </li>
             <li>
-              <Link className="Nav-item" to="/account">Account</Link>
+              <Link className="Nav-item" to="/login">Account</Link>
             </li>
         </ul>
     </nav>

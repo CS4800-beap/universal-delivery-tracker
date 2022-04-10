@@ -10,7 +10,7 @@ import accounts.AccountManager;
 public class TrackerController {
 
     @GetMapping("/login")
-    public String login(@RequestParam(value = "emailid") String emailid,@RequestParam(value = "password") String password){
+    public String login(@RequestParam(value = "emailid") String emailid, @RequestParam(value = "password") String password){
         AccountManager accountManager = AccountManager.getAccountManager();
         try {
             accountManager.login(emailid, password);
@@ -18,6 +18,17 @@ public class TrackerController {
         catch(Exception e){
             return e.getMessage();
         }
-        return "";
+        return "true";  // Login was successful
+    }
+
+    @GetMapping("/signup")
+    public String signup(@RequestParam(value = "emailid") String emailid, @RequestParam(value = "password") String password, @RequestParam(value = "fname") String fname, @RequestParam(value = "lname") String lname){
+        
+
+        
+        // Temporary return to test API call
+        return emailid + " " + password + " " + fname + " " + lname;
+        
+        // return "true"; // Login was successful
     }
 }
