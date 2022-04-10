@@ -1,11 +1,9 @@
-package edu.cpp.beap.universaldeliverytracker;
+package accounts;
 
+import jdbc.SpringJDBCConfig;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.List;
-import com.google.common.hash.Hashing;
-
-import java.sql.SQLIntegrityConstraintViolationException;
 
 public class AccountManager {
     private static AccountManager accountManager;
@@ -36,12 +34,12 @@ public class AccountManager {
         }
     }
 
-    public UserAccount login(String email, String pwd){
+    public UserAccount login(String email, String pwd) throws Exception{
         String sql = "SELECT * FROM users WHERE email = \"" + email + "\";";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(SpringJDBCConfig.getMysqlDataSource());
         List<UserAccount> accounts = jdbcTemplate.query(sql, new UserAccountMapper());
-        if(accounts.size() > 0){
-
+        if(accounts.size() <= 0){
+            throw new Exception("user not found");
         }
         boolean loggedIn = accounts.get(0).checkPassword(pwd);
 
