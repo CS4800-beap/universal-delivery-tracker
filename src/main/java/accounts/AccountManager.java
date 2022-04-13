@@ -1,13 +1,19 @@
 package accounts;
 
+import exceptions.AccountExceptions.InvalidIDException;
+import exceptions.TokenExceptions.TokenExpiredException;
+import io.jsonwebtoken.Jwt;
 import jdbc.SpringJDBCConfig;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import tokens.JwtTokenUtil;
+
 import java.util.List;
 
 public class AccountManager {
     private static AccountManager accountManager;
 
+    //Singleton Class
     private AccountManager(){
 
     }
@@ -20,46 +26,81 @@ public class AccountManager {
         return accountManager;
     }
 
-    public boolean createNewAccount(String username, String email, String pwd, String fname, String lname){
+    //Creates a new account, catches DuplicateKeyException if account already exists
+    public boolean createNewAccount(String username, String email, String pwd, String fname, String lname) throws DuplicateKeyException{
         JdbcTemplate jdbcTemplate = new JdbcTemplate(SpringJDBCConfig.getMysqlDataSource());
 
         String sql = "INSERT INTO users (username, email, password, first_name, last_name) VALUES (?, ?, ?, ?, ?);";
 
-        try {
-            int result = jdbcTemplate.update(sql, username, email, pwd, fname, lname);
-            return result > 0;
-        } catch (DuplicateKeyException e) {
-            System.out.println("userid/ email already exists. please try a different combination.");
-            return false;
-        }
+        int result = jdbcTemplate.update(sql, username, email, pwd, fname, lname);
+        return result > 0;
     }
 
-    public UserAccount login(String email, String pwd) throws Exception{
+    public String login(String email, String pwd) throws InvalidIDException{
         String sql = "SELECT * FROM users WHERE email = \"" + email + "\";";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(SpringJDBCConfig.getMysqlDataSource());
         List<UserAccount> accounts = jdbcTemplate.query(sql, new UserAccountMapper());
-        if(accounts.size() <= 0){
-            throw new Exception("user not found");
-        }
-        boolean loggedIn = accounts.get(0).checkPassword(pwd);
 
-        if(loggedIn){
-            System.out.println("User " + email + " logged in successfully.");
+        if(accounts.size() <= 0){
+            throw new InvalidIDException("User Not Found");
+        }
+
+        boolean loggedIn = accounts.get(0).checkPassword(pwd);
+        if(!loggedIn){
+            return "Incorrect Password";
         }
         else{
-            System.out.println("Login attempt failed.");
+            JwtTokenUtil tokens = new JwtTokenUtil();
+            return tokens.generateToken(accounts.get(0));
         }
-
-        return accounts.get(0);
     }
 
-    public List<String> getTrackingNumbers(String token){
-        String sql = "";
-        return null;
+    public List<String> getTrackingNumbers(String token) throws TokenExpiredException, InvalidIDException{
+        validateToken(token);
+        String identifier = getUserFromToken(token);
+        validateUserID(identifier);
+
+        String sql = "SELECT * FROM tracking_numbers WHERE username = \"" + identifier + "\";";
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(SpringJDBCConfig.getMysqlDataSource());
+        List<String> trackingNumbers = jdbcTemplate.query(sql, new TrackingNumbersMapper());
+
+        return trackingNumbers;
     }
 
-    public boolean addTrackingNumber(){
+    public boolean addTrackingNumber(String token, String trackingNumber) throws InvalidIDException, TokenExpiredException {
+        validateToken(token);
+        String identifier = getUserFromToken(token);
+        validateUserID(identifier);
 
-        return false;
+        String sql = "INSERT INTO tracking_numbers (username, tracking_numberscol) VALUES (?, ?);";
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(SpringJDBCConfig.getMysqlDataSource());
+        int result = jdbcTemplate.update(sql, identifier, trackingNumber);
+
+        return result > 0;
+    }
+
+    private String getUserFromToken(String token){
+        JwtTokenUtil jtu = new JwtTokenUtil();
+        return jtu.getUsernameFromToken(token);
+    }
+
+    private boolean validateToken(String token) throws TokenExpiredException{
+        JwtTokenUtil jtu = new JwtTokenUtil();
+
+        if (!jtu.validateToken(token))
+            throw new TokenExpiredException();
+
+        return true;
+    }
+
+    private boolean validateUserID(String ID) throws InvalidIDException{
+        String sql = "SELECT * FROM users WHERE email = \"" + ID + "\";";
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(SpringJDBCConfig.getMysqlDataSource());
+        List<UserAccount> accounts = jdbcTemplate.query(sql, new UserAccountMapper());
+
+        if (accounts.size() == 0)
+            throw new InvalidIDException("Invalid Username");
+
+        return true;
     }
 }

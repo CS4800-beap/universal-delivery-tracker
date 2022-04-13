@@ -33,4 +33,12 @@ public class UserAccount {
     public boolean checkPassword(String pwd){
         return password.equals(pwd);
     }
+
+    public String getUsername(){
+        return username;
+    }
+
+    public String getEmail(){
+        return email;
+    }
 }
