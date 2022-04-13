@@ -24,11 +24,18 @@ function Login() {
         axios.get("http://localhost:8080/login?emailid=" + email + "&password=" + password)
             .then(response => {
                 console.log(response.data)
-                if (response.data == true) {
-                    toAccount()
-                } else {
+                if (response.data === "User Not Found" || response.data === "Incorrect Password") {
                     // Temporary alert
                     alert("Invalid credentials")
+                } else {
+                    /*
+                    if (checked) {
+                        localStorage.setItem("token", response.data)
+                    } else {
+                        sessionStorage.setItem("token", response.data)
+                    }
+                    */
+                    toAccount()
                 }
             })
             .catch (error => console.error(error))

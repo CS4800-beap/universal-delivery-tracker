@@ -31,14 +31,14 @@ function Signup() {
         console.log("Remember me?:", checked)
         */
 
-        if (password != confirmPassword) {
+        if (password !== confirmPassword) {
             // Temporary alert
             alert("Passwords do not match")
         } else {
             axios.get("http://localhost:8080/signup?emailid=" + email + "&password=" + password + "&fname=" + firstName + "&lname=" + lastName)
                 .then(function(response) {
                     console.log(response.data)
-                    if (response.data == true) {
+                    if (response.data === "success") {
                         toAccount()
                     } else {
                         // Temporary alert
