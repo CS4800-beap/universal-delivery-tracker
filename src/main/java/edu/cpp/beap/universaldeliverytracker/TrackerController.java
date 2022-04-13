@@ -17,12 +17,11 @@ public class TrackerController {
     public String login(@RequestParam(value = "emailid") String emailid, @RequestParam(value = "password") String password){
         AccountManager accountManager = AccountManager.getAccountManager();
         try {
-            accountManager.login(emailid, password);
+            return accountManager.login(emailid, password); // Login successful, return token
         }
         catch(Exception e){
             return e.getMessage();
         }
-        return "true";  // Login was successful
     }
 
     @GetMapping("/signup")

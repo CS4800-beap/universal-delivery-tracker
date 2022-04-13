@@ -39,6 +39,13 @@ function Signup() {
                 .then(function(response) {
                     console.log(response.data)
                     if (response.data === "success") {
+                        /*
+                        if (checked) {
+                            localStorage.setItem("token", response.data)
+                        } else {
+                            sessionStorage.setItem("token", response.data)
+                        }
+                        */
                         toAccount()
                     } else {
                         // Temporary alert

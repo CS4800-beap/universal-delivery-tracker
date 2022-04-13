@@ -7,6 +7,14 @@ function Account() {
   const navigate = useNavigate();
   const toLogin = useCallback(() => navigate('/login', {replace: false}), [navigate]);
 
+  function logout() {
+    //sessionStorage.clear();
+    //localStorage.clear();
+    sessionStorage.removeItem("token");
+    localStorage.removeItem("token");
+    toLogin()
+  }
+
   return (
     <div className="App-body">
         <h1>
@@ -17,7 +25,7 @@ function Account() {
             Account contents
         </div>
 
-        <button onClick={toLogin} style={{margin: '1vh'}}>
+        <button onClick={logout} style={{margin: '1vh'}}>
             back to login page
         </button>
     </div>

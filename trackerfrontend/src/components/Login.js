@@ -38,7 +38,7 @@ function Login() {
                     toAccount()
                 }
             })
-            .catch (error => console.error(error))
+            .catch (error => console.error(error.response))
     }
 
     return(
