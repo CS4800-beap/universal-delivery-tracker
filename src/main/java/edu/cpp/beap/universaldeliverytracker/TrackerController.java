@@ -65,4 +65,14 @@ public class TrackerController {
 
         return "failure";
     }
+
+    @GetMapping("/validateToken")
+    public boolean validateToken(@RequestParam(value = "token") String token){
+        
+        // TODO: param token is received from the from user's localStorage or sessionStorage
+        // validate token here to to determine if user is already logged in and should be redirected
+
+        return false;
+
+    }
 }
