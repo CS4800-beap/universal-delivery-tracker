@@ -22,8 +22,8 @@ function Home() {
         - JJD + 16 digits: JJD0000000000000000
         */
         if (((trackingNumber.length === 9 || trackingNumber.length === 10) && /^[0-9]+$/.test(trackingNumber)) ||
-            (trackingNumber.substring(0, 2) === "JD" && trackingNumber.substring(2).length === 18) ||
-            (trackingNumber.substring(0, 3) === "JJD" && trackingNumber.substring(3).length === 16)) {
+            (trackingNumber.substring(0, 2) === "JD" && trackingNumber.substring(2).length === 18 && /^[0-9]+$/.test(trackingNumber.substring(2))) ||
+            (trackingNumber.substring(0, 3) === "JJD" && trackingNumber.substring(3).length === 16 && /^[0-9]+$/.test(trackingNumber.substring(3)))) {
                 setCourier("DHL");
 
                 // Send HTTP GET request to DHL's track/shipments API endpoint with the user's tracking number
