@@ -33,9 +33,13 @@ function Signup() {
     function checkToken() {
 
         var token = "";
-        token = sessionStorage.getItem("token");
-        token = localStorage.getItem("token");
+        if (localStorage.getItem("token") !== null) {
+            token = localStorage.getItem("token");
+        } else if (sessionStorage.getItem("token") !== null) {
+            token = sessionStorage.getItem("token");
+        }
 
+        // Validate token
         axios.get("http://localhost:8080/validateToken?token=" + token)
             .then(response => {
                 if (response.data) {

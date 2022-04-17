@@ -8,6 +8,10 @@ function Home() {
     const [courier, setCourier] = useState("");
     const [TrackingResponse, setTrackingResponse] = useState("");
 
+    // Package information
+    const [status, setStatus] = useState("");
+
+
     // Get tracking information
     function getTracking(event) {
         event.preventDefault();
@@ -30,9 +34,21 @@ function Home() {
                 axios.get("https://api-eu.dhl.com/track/shipments?trackingNumber=" + trackingNumber, {
                     headers: {"DHL-API-Key": process.env.REACT_APP_DHL_API_KEY}
                 })
-                .then((response) => setTrackingResponse(JSON.stringify(response)))
+                .then((response) => {
+                    setTrackingResponse(JSON.stringify(response, null, 4))
+
+                    setStatus(response.data.shipments[0].status.description)
+
+                    // Validate token if it exists
+                    // Save package information in database if user is logged in.
+                    var token = "";
+                    token = sessionStorage.getItem("token");
+                    token = localStorage.getItem("token");
+                })
                 .catch(error => console.error(error));
-        // No tracking number is entered
+
+
+                // No tracking number is entered
         } else if (trackingNumber.length === 0) {
             setCourier();
             setTrackingResponse();
@@ -44,7 +60,7 @@ function Home() {
 
     return (
         <div className="App-body">
-            <div style={{ height: 200 }}></div> {/* Temporary buffer space */}
+            <div style={{ height: 50 }}></div> {/* Temporary buffer space */}
             <div className="Input-div">
                 <label className="Tracking-number">Tracking Number:</label>
                 <input className="Tracking-number-input" type="text" value={trackingNumber} onInput={(e) => setTrackingNumber(e.target.value)}></input>
@@ -56,8 +72,9 @@ function Home() {
             </div>
 
             <div className="Output-div">
-                <p className="Output-1">Output:</p>
-                <p className="Output-1">{TrackingResponse}</p>
+                <p className="Output-1">Status: {status}</p>
+                <p className="Output-1">Raw Output:</p>
+                <p className="Output-1" style={{fontSize: 15}}>{TrackingResponse}</p>
             </div>
 
         </div>

@@ -88,7 +88,11 @@ public class TrackerController implements ErrorController {
         // TODO: param token is received from the from user's localStorage or sessionStorage
         // validate token here to to determine if user is already logged in and should be redirected
 
-        return false;
+        if (token.length() > 1) {
+            return true;
+        } else {
+            return false;
+        }
 
     }
 }
