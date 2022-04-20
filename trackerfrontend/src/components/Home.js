@@ -4,13 +4,16 @@ import "../App.css";
 
 function Home() {
     
-    const [trackingNumber, setTrackingNumber] = useState("");
-    const [courier, setCourier] = useState("");
-    const [TrackingResponse, setTrackingResponse] = useState("");
+    const [trackingNumber, setTrackingNumber] = useState();
 
-    // Package information
-    const [status, setStatus] = useState("");
-
+    const [courier, setCourier] = useState("Please enter a tracking number.");
+    const [trackingOrigin, setTrackingOrigin] = useState();
+    const [trackingDestination, setTrackingDestination] = useState();
+    
+    const [trackingDataValid, setTrackingDataValid] = useState(false);
+    const [trackingEvents, setTrackingEvents] = useState();
+    const [trackingRawResponse, setTrackingRawResponse] = useState();
+    
 
     // Get tracking information
     function getTracking(event) {
@@ -35,9 +38,24 @@ function Home() {
                     headers: {"DHL-API-Key": process.env.REACT_APP_DHL_API_KEY}
                 })
                 .then((response) => {
-                    setTrackingResponse(JSON.stringify(response, null, 4))
+                    setTrackingDataValid(true)
+                    
+                    // Check if response.data.shipments[0].events has all required elements:
+                    // timestamp, location.address.addressLocality, description
+                    const events = response.data.shipments[0].events;
+                    events.forEach(function(checkedEvent) {
+                        if (checkedEvent.timestamp == null || checkedEvent.location.address.addressLocality == null || checkedEvent.description == null)
+                            setTrackingDataValid(false)
+                    })
 
-                    setStatus(response.data.shipments[0].status.description)
+                    // If the response has all required data, assign them to React variables
+                    if (trackingDataValid) {
+                        setTrackingOrigin(response.data.shipments[0].origin.address.addressLocality)
+                        setTrackingDestination(response.data.shipments[0].destination.address.addressLocality)
+                        setTrackingEvents(response.data.shipments[0].events)
+                    }
+                    
+                    setTrackingRawResponse(JSON.stringify(response, null, 4))
 
                     // Validate token if it exists
                     // Save package information in database if user is logged in.
@@ -46,37 +64,64 @@ function Home() {
                     token = localStorage.getItem("token");
                 })
                 .catch(error => console.error(error));
-
-
-                // No tracking number is entered
+        // No tracking number is entered
         } else if (trackingNumber.length === 0) {
-            setCourier();
-            setTrackingResponse();
+            setCourier("Please enter a tracking number.");
+        // Unsupported tracking number is entered
         } else {
             setCourier("The tracking number you have entered is currently not supported.");
-            setTrackingResponse();
         }
     }
 
     return (
         <div className="App-body">
             <div style={{ height: 50 }}></div> {/* Temporary buffer space */}
-            <div className="Input-div">
+
+            <div className="Tracking-input-div">
                 <label className="Tracking-number">Tracking Number:</label>
                 <input className="Tracking-number-input" type="text" value={trackingNumber} onInput={(e) => setTrackingNumber(e.target.value)}></input>
-                <button className="Get-button" onClick={getTracking}>Get Tracking Status</button>
+                <button className="Tracking-get-button" onClick={getTracking}>Get Tracking Status</button>
             </div>
 
-            <div className="Output-div">
-                <p className="Output-courier">Courier: {courier}</p>
+            <div className="Tracking-input-div">
+                {courier !== "DHL" &&
+                    <p>{courier}</p>
+                }
             </div>
+            
+            {courier === "DHL" &&
+                <div className="Tracking-output-div">
+                    <p className="Tracking-header">Courier: {courier}</p>
+                    <p className="Tracking-header">Origin: {trackingOrigin}</p>
+                    <p className="Tracking-header">Destination: {trackingDestination}</p>
 
-            <div className="Output-div">
-                <p className="Output-1">Status: {status}</p>
-                <p className="Output-1">Raw Output:</p>
-                <p className="Output-1" style={{fontSize: 15}}>{TrackingResponse}</p>
-            </div>
-
+                    {trackingDataValid &&
+                        <div className="Tracking-status-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th className="Tracking-status-table-header">Date (UTC)</th>
+                                    <th className="Tracking-status-table-header">Location</th>
+                                    <th className="Tracking-status-table-header">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {trackingEvents && trackingEvents.map((event, index) =>
+                                    <tr key={index}>
+                                        <td className="Tracking-status-table-cell">{event.timestamp}</td>
+                                        <td className="Tracking-status-table-cell">{event.location.address.addressLocality}</td>
+                                        <td className="Tracking-status-table-cell">{event.description}</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                    }
+                    
+                    <p className="Tracking-raw-output Tracking-header">Raw Output:</p>
+                    <p className="Tracking-raw-output" style={{fontSize: 15}}>{trackingRawResponse}</p>
+                </div>
+            }
         </div>
     );
 }

@@ -33,12 +33,8 @@ nav {
   text-decoration: none;
 }
 
-.Input-div {
-  vertical-align: middle;
-}
-
-.Tracking-number {
-  font-size: 17pt;
+.Tracking-input-div {
+  text-align: left;
 }
 
 .Tracking-number-input {
@@ -48,7 +44,8 @@ nav {
   margin-right: 3vw;
   padding: .3em;
 }
-.Get-button {
+
+.Tracking-get-button {
   background-color: #ff675a;
   cursor: pointer;
   user-select: none;
@@ -63,20 +60,38 @@ nav {
   border: none;
 }
 
-.Get-button:active {
+.Tracking-get-button:active {
   transition-duration: 0.1s;
   background-color: #ff7b5a;
   top: 1px;
 }
 
-.Output-div {
-  text-align: left;
+.Tracking-output-div {
   margin-top: 5vh;
-  width: 75%;
+  width: 80%;
 }
 
-.Output-1 {
-  overflow-wrap: anywhere;
+.Tracking-header {
+  font-weight: bold;
+  text-align: left;
+}
+
+.Tracking-status-table {
+  text-align: left;
+}
+
+.Tracking-status-table-header {
+  padding-bottom: 1vw;
+}
+
+.Tracking-status-table-cell {
+  padding-right: 4vw;
+  padding-bottom: 1vw;
+  vertical-align: top;
+}
+
+.Tracking-raw-output {
+  text-align: left;
 }
 
 .Form-container {
