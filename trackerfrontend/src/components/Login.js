@@ -7,9 +7,10 @@ function Login() {
     
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [rememberMeChecked, setChecked] = React.useState(false);
+    const [loginErrorMessage, setLoginErrorMessage] = useState("");
 
-    const [checked, setChecked] = React.useState(false);
-    const handleChange = () => { setChecked(!checked); };
+    const handleChange = () => { setChecked(!rememberMeChecked); };
 
     const navigate = useNavigate();
     const toAccount = useCallback(() => navigate('/account', {replace: false}), [navigate]);
@@ -21,7 +22,7 @@ function Login() {
         
         if (!ignore)  checkToken()
             return () => { ignore = true; }
-        },[]);
+        },[]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // Call API to check tokens in local and session storages
     function checkToken() {
@@ -52,17 +53,23 @@ function Login() {
 
         axios.get("http://localhost:8080/login?emailid=" + email + "&password=" + password)
             .then(response => {
-                if (response.data === "User Not Found" || response.data === "Incorrect Password") {
-                    // Temporary alert
-                    alert("Invalid credentials")
-                } else {
-                    if (checked) {
-                        localStorage.setItem("token", response.data)
-                    } else {
-                        sessionStorage.setItem("token", response.data)
-                    }
-                    toAccount()
+                if (response.data === "User Not Found") {
+                    setLoginErrorMessage("Account Not Found.")
+                    return
                 }
+                if (response.data === "Incorrect Password") {
+                    setLoginErrorMessage("Incorrect Password.")
+                    return
+                }
+                
+                // Check if user has opted into remember me and store token accordingly
+                if (rememberMeChecked) {
+                    localStorage.setItem("token", response.data)
+                } else {
+                    sessionStorage.setItem("token", response.data)
+                }
+
+                toAccount()
             })
             .catch (error => console.error(error.response))
     }
@@ -80,12 +87,14 @@ function Login() {
 
                     <button onClick={login}>Log in</button>
 
+                    <div className="Form-text" style={{fontSize: 15, color: '#ff4337', fontWeight: 'bold'}}>{loginErrorMessage}</div>
+
                     <div>
-                        <p style={{display: 'inline-block', fontSize: 18, marginRight: 7}}>Remember Me </p>
-                        <input type="checkbox" checked={checked} onChange={handleChange} />
+                        <div className="Form-text" style={{display: 'inline-block', fontSize: 18, marginRight: 7}}>Remember Me </div>
+                        <input type="checkbox" checked={rememberMeChecked} onChange={handleChange} />
                     </div>
 
-                    <p style={{fontSize: 18}}>Don't have an account? <Link to='/signup' style={{color: "white"}}>Sign up</Link></p>
+                    <div className="Form-text" style={{fontSize: 18}}>Don't have an account? <Link to='/signup' style={{color: "white"}}>Sign up</Link></div>
              
 
                 </div>

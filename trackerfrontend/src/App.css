@@ -115,7 +115,12 @@ nav {
   font-size: 16px;
   width: 100%;
   padding: 10px;
-  margin: 0px 0vh 3vh 0vh;
+  margin: 0vh 0vh 3vh 0vh;
 
   box-sizing: border-box;
+}
+
+.Form-text {
+  display: block;
+  margin: 3vh 0vh 0vh 0vh;
 }

@@ -12,10 +12,11 @@ function Signup() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [checked, setChecked] = useState(false);
+    const [rememberMeChecked, setChecked] = useState(false);
+    const [signupErrorMessage, setSignupErrorMessage] = useState("");
     // https://www.robinwieruch.de/react-checkbox/
 
-    const handleChange = () => { setChecked(!checked); };
+    const handleChange = () => { setChecked(!rememberMeChecked); };
 
     const navigate = useNavigate();
     const toAccount = useCallback(() => navigate('/account', {replace: false}), [navigate]);
@@ -27,7 +28,7 @@ function Signup() {
         
         if (!ignore)  checkToken()
             return () => { ignore = true; }
-        },[]);
+        },[]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // Call API to check tokens in local and session storages
     function checkToken() {
@@ -60,7 +61,7 @@ function Signup() {
         console.log("Email: ", email)
         console.log("Password: ", password)
         console.log("Confirm Password: ", confirmPassword)
-        console.log("Remember me?:", checked)
+        console.log("Remember me?:", rememberMeChecked)
         */
 
         if (password !== confirmPassword) {
@@ -69,20 +70,21 @@ function Signup() {
         } else {
             axios.get("http://localhost:8080/signup?emailid=" + email + "&password=" + password + "&fname=" + firstName + "&lname=" + lastName)
                 .then(function(response) {
-                    if (response.data === "success") {
-                        if (checked) {
-                            localStorage.setItem("token", response.data)
-                        } else {
-                            sessionStorage.setItem("token", response.data)
-                        }
-                        toAccount()
-                    } else {
-                        // Temporary alert
-                        alert("Failed to create account")
+                    if (response.data !== "success") {
+                        setSignupErrorMessage("Failed to create account.")
+                        return
                     }
-                }).catch (error => {
-                    console.log(error.response.data.error);
+
+                    // Check if user has opted into remember me and store token accordingly
+                    if (rememberMeChecked) {
+                        localStorage.setItem("token", response.data)
+                    } else {
+                        sessionStorage.setItem("token", response.data)
+                    }
+
+                    toAccount()
                 })
+                .catch (error => console.error(error.response.data.error))
         }
     }
 
@@ -101,12 +103,14 @@ function Signup() {
 
                     <button onClick={signup}>Sign up</button>
                     
+                    <div className="Form-text" style={{fontSize: 15, color: '#ff4337', fontWeight: 'bold'}}>{signupErrorMessage}</div>
+
                     <div>
-                        <p style={{display: 'inline-block', fontSize: 18, marginRight: 7}}>Remember Me </p>
-                        <input type="checkbox" checked={checked} onChange={handleChange} />
+                        <div className="Form-text" style={{display: 'inline-block', fontSize: 18, marginRight: 7}}>Remember Me </div>
+                        <input type="checkbox" checked={rememberMeChecked} onChange={handleChange} />
                     </div>
 
-                    <p style={{fontSize: 18}}>Already have an account? <Link to='/login' style={{color: "white"}}>Log in</Link></p>
+                    <div className="Form-text" style={{fontSize: 18}}>Already have an account? <Link to='/login' style={{color: "white"}}>Log in</Link></div>
                 
 
                 </div>
