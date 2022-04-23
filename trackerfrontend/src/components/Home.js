@@ -64,6 +64,14 @@ function Home() {
                     token = localStorage.getItem("token");
                 })
                 .catch(error => console.error(error));
+        /*
+        FedEx:
+        - Source: https://www.trackingmore.com/tracking-status-detail-en-236.html
+        - 10/12/15/20/22 digits: 794843185271
+        */
+        } else if ((trackingNumber.length === 10 || trackingNumber.length === 12 || trackingNumber.length === 15 ||
+                    trackingNumber.length === 20 || trackingNumber.length === 22) && /^[0-9]+$/.test(trackingNumber)) {
+            setCourier("Fedex");
         // No tracking number is entered
         } else if (trackingNumber.length === 0) {
             setCourier("Please enter a tracking number.");
@@ -84,7 +92,7 @@ function Home() {
             </div>
 
             <div className="Tracking-input-div">
-                {courier !== "DHL" &&
+                {!(courier === "DHL" || courier === "FedEx") &&
                     <p>{courier}</p>
                 }
             </div>
