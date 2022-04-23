@@ -38,24 +38,24 @@ function Home() {
                     headers: {"DHL-API-Key": process.env.REACT_APP_DHL_API_KEY}
                 })
                 .then((response) => {
-                    setTrackingDataValid(true)
+                    setTrackingDataValid(true);
                     
                     // Check if response.data.shipments[0].events has all required elements:
                     // timestamp, location.address.addressLocality, description
                     const events = response.data.shipments[0].events;
                     events.forEach(function(checkedEvent) {
                         if (checkedEvent.timestamp == null || checkedEvent.location.address.addressLocality == null || checkedEvent.description == null)
-                            setTrackingDataValid(false)
+                            setTrackingDataValid(false);
                     })
 
                     // If the response has all required data, assign them to React variables
                     if (trackingDataValid) {
-                        setTrackingOrigin(response.data.shipments[0].origin.address.addressLocality)
-                        setTrackingDestination(response.data.shipments[0].destination.address.addressLocality)
-                        setTrackingEvents(response.data.shipments[0].events)
+                        setTrackingOrigin(response.data.shipments[0].origin.address.addressLocality);
+                        setTrackingDestination(response.data.shipments[0].destination.address.addressLocality);
+                        setTrackingEvents(response.data.shipments[0].events);
                     }
                     
-                    setTrackingRawResponse(JSON.stringify(response, null, 4))
+                    setTrackingRawResponse(JSON.stringify(response, null, 4));
 
                     // Validate token if it exists
                     // Save package information in database if user is logged in.
