@@ -118,15 +118,20 @@ function Home() {
 
             <div className="Tracking-input-div">
                 <label className="Tracking-number">Tracking Number:</label>
+
                 <input className="Tracking-number-input" type="text" value={trackingNumber}
                     onInput={(e) => setTrackingNumber(e.target.value)}
                     onKeyDown={handleEnterKeyPress}>
                 </input>
+
                 <select className="Tracking-courier-dropdown" value={courier} onChange={handleDropdownChange}>
                     {couriers.map((courier) => (
-                        <option key={courier}>{courier}</option>
+                        <option key={courier}>
+                            {courier}
+                        </option>
                     ))}
                 </select>
+
                 <button className="Tracking-get-button" onClick={getTracking}>Get Tracking Status</button>
             </div>
 
