@@ -4,23 +4,19 @@ import "../App.css";
 
 function Home() {
     
-    const [trackingNumber, setTrackingNumber] = useState();
-    const couriers = [
-        {label: 'Select a courier', value: 'Select a courier'},
-        {label: 'DHL', value: 'DHL'},
-        {label: 'FedEx', value: 'FedEx'},
-      ];
+    const [trackingNumber, setTrackingNumber] = useState("");
+    const couriers = ["Select a courier", "DHL", "FedEx"];
     const handleDropdownChange = (event) => {
         setCourier(event.target.value);
       };
     const [courier, setCourier] = useState();
 
-    const [trackingOrigin, setTrackingOrigin] = useState();
-    const [trackingDestination, setTrackingDestination] = useState();
-    
     const [trackingInputError, setTrackingInputError] = useState();
     const [trackingResponseValid, setTrackingResponseValid] = useState(false);
     const [trackingResponseDataValid, setTrackingResponseDataValid] = useState(false);
+
+    const [trackingOrigin, setTrackingOrigin] = useState();
+    const [trackingDestination, setTrackingDestination] = useState();
     const [trackingEvents, setTrackingEvents] = useState();
     const [trackingRawResponse, setTrackingRawResponse] = useState();
     
@@ -34,7 +30,6 @@ function Home() {
         if (trackingNumber.length > 0) {
             // DHL selected
             if (courier === "DHL") {
-
                 // Send HTTP GET request to DHL's track/shipments API endpoint with the user's tracking number
                 axios.get("https://api-eu.dhl.com/track/shipments?trackingNumber=" + trackingNumber, {
                     headers: {"DHL-API-Key": process.env.REACT_APP_DHL_API_KEY}
@@ -70,12 +65,12 @@ function Home() {
                     console.error(error);
                     setTrackingInputError("Please enter a valid tracking number.");
                 });
-            // No specific courier is selected
+            // FedEx selected
+            } else if (courier === "FedEx") {
+                setTrackingInputError("FedEx is currently not supported.");
+            // No specific courier selected
             } else if (courier === "Select a courier") {
                 setTrackingInputError("Please select a courier.");
-            // Unsupported courier selected
-            } else {
-                setTrackingInputError("This courier is currently not supported.");
             }
         // No tracking number is entered
         } else if (trackingNumber.length === 0) {
@@ -90,15 +85,12 @@ function Home() {
             <div className="Tracking-input-div">
                 <label className="Tracking-number">Tracking Number:</label>
                 <input className="Tracking-number-input" type="text" value={trackingNumber} onInput={(e) => setTrackingNumber(e.target.value)}></input>
-                <button className="Tracking-get-button" onClick={getTracking}>Get Tracking Status</button>
-            </div>
-
-            <div className="Tracking-input-div">
-                <select value={courier} onChange={handleDropdownChange}>
-                    {couriers.map((option) => (
-                        <option value={option.value}>{option.label}</option>
+                <select className="Tracking-courier-dropdown" value={courier} onChange={handleDropdownChange}>
+                    {couriers.map((courier) => (
+                        <option key={courier}>{courier}</option>
                     ))}
                 </select>
+                <button className="Tracking-get-button" onClick={getTracking}>Get Tracking Status</button>
             </div>
 
             <div className="Tracking-input-div">
