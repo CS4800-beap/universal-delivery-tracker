@@ -9,7 +9,7 @@ function Home() {
     const handleDropdownChange = (event) => {
         setCourier(event.target.value);
       };
-    const [courier, setCourier] = useState();
+    const [courier, setCourier] = useState("Select a courier");
 
     const [trackingInputError, setTrackingInputError] = useState();
     const [trackingResponseValid, setTrackingResponseValid] = useState(false);
@@ -20,6 +20,12 @@ function Home() {
     const [trackingEvents, setTrackingEvents] = useState();
     const [trackingRawResponse, setTrackingRawResponse] = useState();
     
+    // Detect enter key press
+    function handleEnterKeyPress(event) {
+        if(event.key === 'Enter') {
+            getTracking(event)
+        }
+    }
 
     // Get tracking information
     function getTracking(event) {
@@ -57,9 +63,10 @@ function Home() {
     
                     // Validate token if it exists
                     // Save package information in database if user is logged in.
-                    var token = "";
-                    token = sessionStorage.getItem("token");
-                    token = localStorage.getItem("token");
+                    if (checkToken()) {
+                        // TODO: save package information (tracking number) to database here
+                        console.log("token is valid, save package information")
+                    }
                 })
                 .catch(error => {
                     console.error(error);
@@ -78,13 +85,43 @@ function Home() {
         }
     }
 
+    // Call API to check tokens in local and session storages
+    function checkToken() {
+
+        var token = "";
+        if (localStorage.getItem("token") !== null) {
+            token = localStorage.getItem("token");
+        } else if (sessionStorage.getItem("token") !== null) {
+            token = sessionStorage.getItem("token");
+        }
+        
+        console.log("http://localhost:8080/validateToken?token=" + token);
+        // Validate token
+        axios.get("http://localhost:8080/validateToken?token=" + token)
+            .then(response => {
+                if (!response.data) {
+                    sessionStorage.removeItem("token");
+                    localStorage.removeItem("token");
+                }
+                return response.data
+            })
+            .catch (error => {
+                console.error(error.response)
+                return false
+            })
+        return false;
+    }
+
     return (
         <div className="App-body">
             <div style={{height: 50}}></div> {/* Temporary buffer space */}
 
             <div className="Tracking-input-div">
                 <label className="Tracking-number">Tracking Number:</label>
-                <input className="Tracking-number-input" type="text" value={trackingNumber} onInput={(e) => setTrackingNumber(e.target.value)}></input>
+                <input className="Tracking-number-input" type="text" value={trackingNumber}
+                    onInput={(e) => setTrackingNumber(e.target.value)}
+                    onKeyDown={handleEnterKeyPress}>
+                </input>
                 <select className="Tracking-courier-dropdown" value={courier} onChange={handleDropdownChange}>
                     {couriers.map((courier) => (
                         <option key={courier}>{courier}</option>
@@ -95,7 +132,7 @@ function Home() {
 
             <div className="Tracking-input-div">
                 {!trackingResponseValid &&
-                    <p>{trackingInputError}</p>
+                    <p style={{display: 'inline-block', fontSize: 20}}>{trackingInputError}</p>
                 }
             </div>
             

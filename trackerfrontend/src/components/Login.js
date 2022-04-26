@@ -15,6 +15,12 @@ function Login() {
     const navigate = useNavigate();
     const toAccount = useCallback(() => navigate('/account', {replace: false}), [navigate]);
 
+    // Detect enter key press
+    function handleEnterKeyPress(event) {
+        if(event.key === 'Enter') {
+            login()
+        }
+    }
 
     // Call checkToken() after component has rendered
     useEffect(() => {
@@ -29,9 +35,9 @@ function Login() {
 
         var token = "";
         if (localStorage.getItem("token") !== null) {
-            token = localStorage.getItem("token");
+            token = localStorage.getItem("token")
         } else if (sessionStorage.getItem("token") !== null) {
-            token = sessionStorage.getItem("token");
+            token = sessionStorage.getItem("token")
         }
         
         console.log("http://localhost:8080/validateToken?token=" + token);
@@ -41,8 +47,8 @@ function Login() {
                 if (response.data) {
                     toAccount()
                 } else {
-                    sessionStorage.removeItem("token");
-                    localStorage.removeItem("token");
+                    sessionStorage.removeItem("token")
+                    localStorage.removeItem("token")
                 }
             })
             .catch (error => console.error(error.response))
@@ -51,7 +57,10 @@ function Login() {
     // Handle log in
     function login() {
 
-        axios.get("http://localhost:8080/login?emailid=" + email + "&password=" + password)
+        if (email.length < 1 || password.length < 1) {
+            setLoginErrorMessage("Please fill in all fields.")
+        } else {
+            axios.get("http://localhost:8080/login?emailid=" + email + "&password=" + password)
             .then(response => {
                 if (response.data === "User Not Found") {
                     setLoginErrorMessage("Account Not Found.")
@@ -71,7 +80,12 @@ function Login() {
 
                 toAccount()
             })
-            .catch (error => console.error(error.response))
+            .catch (error => {
+                console.error(error.response)
+                setLoginErrorMessage("An unexpected error has occurred. Unable to login.")
+            })
+        }
+        
     }
 
     return(
@@ -82,8 +96,12 @@ function Login() {
 
             <div className="Form-container">
                 <div className="Form">
-                    <input className="Form-control" name="wenben" type="text" placeholder={'email'} value={email} onInput={(e) => setEmail(e.target.value)}/>
-                    <input className="Form-control" name="wenben" type="password" placeholder={'password'} value={password} onInput={(e) => setPassword(e.target.value)}/>
+                    <input className="Form-control" name="wenben" type="text" placeholder={'email'} value={email}
+                        onInput={(e) => setEmail(e.target.value)}
+                        onKeyDown={handleEnterKeyPress}/>
+                    <input className="Form-control" name="wenben" type="password" placeholder={'password'} value={password}
+                        onInput={(e) => setPassword(e.target.value)}
+                        onKeyDown={handleEnterKeyPress}/>
 
                     <button onClick={login}>Log in</button>
 

@@ -20,7 +20,13 @@ function Signup() {
 
     const navigate = useNavigate();
     const toAccount = useCallback(() => navigate('/account', {replace: false}), [navigate]);
-    
+
+    // Detect enter key press
+    function handleEnterKeyPress(event) {
+        if(event.key === 'Enter') {
+            signup()
+        }
+    }
 
     // Call checkToken() after component has rendered
     useEffect(() => {
@@ -35,9 +41,9 @@ function Signup() {
 
         var token = "";
         if (localStorage.getItem("token") !== null) {
-            token = localStorage.getItem("token");
+            token = localStorage.getItem("token")
         } else if (sessionStorage.getItem("token") !== null) {
-            token = sessionStorage.getItem("token");
+            token = sessionStorage.getItem("token")
         }
 
         // Validate token
@@ -46,8 +52,8 @@ function Signup() {
                 if (response.data) {
                     toAccount()
                 } else {
-                    sessionStorage.removeItem("token");
-                    localStorage.removeItem("token");
+                    sessionStorage.removeItem("token")
+                    localStorage.removeItem("token")
                 }
             })
             .catch (error => console.error(error.response))
@@ -55,18 +61,11 @@ function Signup() {
 
     // Handle sign up
     function signup() {
-        /*
-        console.log("First Name: ", firstName)
-        console.log("Last Name: ", lastName)
-        console.log("Email: ", email)
-        console.log("Password: ", password)
-        console.log("Confirm Password: ", confirmPassword)
-        console.log("Remember me?:", rememberMeChecked)
-        */
 
-        if (password !== confirmPassword) {
-            // Temporary alert
-            alert("Passwords do not match")
+        if (firstName.length < 1 || lastName.length < 1 || email.length < 1 || password.length < 1 || confirmPassword.length < 1) {
+            setSignupErrorMessage("Please fill in all fields.")
+        } else if (password !== confirmPassword) {
+            setSignupErrorMessage("Passwords do not match.")
         } else {
             axios.get("http://localhost:8080/signup?emailid=" + email + "&password=" + password + "&fname=" + firstName + "&lname=" + lastName)
                 .then(function(response) {
@@ -84,7 +83,10 @@ function Signup() {
 
                     toAccount()
                 })
-                .catch (error => console.error(error.response.data.error))
+                .catch (error => {
+                    console.error(error.response.data.error)
+                    setSignupErrorMessage("An unexpected error has occurred. Unable to login.")
+                })
         }
     }
 
@@ -95,11 +97,21 @@ function Signup() {
             </h1>
             <div className="Form-container">
                 <div className="Form">
-                    <input className="Form-control" name="wenben" type="text" placeholder={'first name'} value={firstName} onInput={(e) => setFirstName(e.target.value)}/>
-                    <input className="Form-control" name="wenben" type="text" placeholder={'last name'} value={lastName} onInput={(e) => setLastName(e.target.value)}/>
-                    <input className="Form-control" name="wenben" type="text" placeholder={'email'} value={email} onInput={(e) => setEmail(e.target.value)}/>
-                    <input className="Form-control" name="wenben" type="password" placeholder={'password'} value={password} onInput={(e) => setPassword(e.target.value)}/>
-                    <input className="Form-control" name="wenben" type="password" placeholder={'confirm password'} value={confirmPassword} onInput={(e) => setConfirmPassword(e.target.value)}/>
+                    <input className="Form-control" name="wenben" type="text" placeholder={'first name'} value={firstName}
+                        onInput={(e) => setFirstName(e.target.value)}
+                        onKeyDown={handleEnterKeyPress}/>
+                    <input className="Form-control" name="wenben" type="text" placeholder={'last name'} value={lastName}
+                        onInput={(e) => setLastName(e.target.value)}
+                        onKeyDown={handleEnterKeyPress}/>
+                    <input className="Form-control" name="wenben" type="text" placeholder={'email'} value={email}
+                        onInput={(e) => setEmail(e.target.value)}
+                        onKeyDown={handleEnterKeyPress}/>
+                    <input className="Form-control" name="wenben" type="password" placeholder={'password'} value={password}
+                        onInput={(e) => setPassword(e.target.value)}
+                        onKeyDown={handleEnterKeyPress}/>
+                    <input className="Form-control" name="wenben" type="password" placeholder={'confirm password'} value={confirmPassword}
+                        onInput={(e) => setConfirmPassword(e.target.value)}
+                        onKeyDown={handleEnterKeyPress}/>
 
                     <button onClick={signup}>Sign up</button>
                     

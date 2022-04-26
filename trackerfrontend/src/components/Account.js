@@ -40,8 +40,6 @@ function Account() {
 
 
   function logout() {
-    //sessionStorage.clear();
-    //localStorage.clear();
     sessionStorage.removeItem("token");
     localStorage.removeItem("token");
     toLogin()
@@ -59,7 +57,7 @@ function Account() {
         </div>
 
         <button onClick={logout} style={{margin: '1vh'}}>
-            back to login page
+            Back to login page (logout)
         </button>
     </div>
   );
