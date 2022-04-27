@@ -40,7 +40,6 @@ function Login() {
             token = sessionStorage.getItem("token")
         }
         
-        console.log("http://localhost:8080/validateToken?token=" + token);
         // Validate token
         axios.get("http://localhost:8080/validateToken?token=" + token)
             .then(response => {

@@ -65,10 +65,7 @@ function Home() {
     
                     // Validate token if it exists
                     // Save package information in database if user is logged in.
-                    if (checkToken()) {
-                        // TODO: save package information (tracking number) to database here
-                        console.log("token is valid, save package information")
-                    }
+                    checkToken()
                 })
                 .catch(error => {
                     console.error(error);
@@ -97,21 +94,20 @@ function Home() {
             token = sessionStorage.getItem("token");
         }
         
-        console.log("http://localhost:8080/validateToken?token=" + token);
         // Validate token
         axios.get("http://localhost:8080/validateToken?token=" + token)
             .then(response => {
                 if (!response.data) {
                     sessionStorage.removeItem("token");
                     localStorage.removeItem("token");
+                    console.log("no valid token, don't save package information")
+                } else {
+                    // Save package information in database
+                    console.log("token is valid, save package information")
+                    // TODO: save package information (tracking number) to database here
                 }
-                return response.data;
             })
-            .catch (error => {
-                console.error(error.response);
-                return false;
-            })
-        return false;
+            .catch (error => console.error(error.response))
     }
 
     return (
