@@ -10,7 +10,7 @@ function About() {
             </h1>
       
             <a href="https://github.com/CS4800-beap/universal-delivery-tracker" target="_blank" rel="noreferrer noopener">
-                <img src={githubBadge} alt="GitHub badge" className="GitHub-badge"/>
+                <img src={githubBadge} alt="GitHub badge"/>
             </a>
         </div>
     );
