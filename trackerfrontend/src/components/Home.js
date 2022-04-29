@@ -5,7 +5,7 @@ import "../App.css";
 function Home() {
     
     const [trackingNumber, setTrackingNumber] = useState("");
-    const courierDropdownItems = ["Select a courier", "DHL", "FedEx"];
+    const courierDropdownItems = ["Select a courier", "DHL", "FedEx", "USPS"];
     const handleCourierDropdownChange = (event) => {
         setCourier(event.target.value);
       };
@@ -74,10 +74,13 @@ function Home() {
             // FedEx selected
             } else if (courier === "FedEx") {
                 setTrackingInputMessage("FedEx is currently not supported.");
-            // No specific courier selected
-            } else if (courier === "Select a courier") {
+            } else if (courier === "USPS") {
+                setTrackingInputMessage("FedEx is currently not supported.");
+            }// No specific courier selected
+             else if (courier === "Select a courier") {
                 setTrackingInputMessage("Please select a courier.");
-            }
+            } 
+            
         // No tracking number is entered
         } else if (trackingNumber.length === 0) {
             setTrackingInputMessage("Please enter a valid tracking number.");
