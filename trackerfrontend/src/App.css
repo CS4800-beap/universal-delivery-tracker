@@ -21,9 +21,9 @@ nav {
 }
 
 .Nav-items {
-  width: 30%;
+  width: 80%;
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-end;
   align-items: center;
   list-style: none;
 }
@@ -31,6 +31,7 @@ nav {
 .Nav-item {
   color: white;
   text-decoration: none;
+  margin-left: 10vh;
 }
 
 .Tracking-input-div {
@@ -96,6 +97,7 @@ nav {
   padding-right: 4vw;
   padding-bottom: 1vw;
   vertical-align: top;
+  font-size: 20px;
 }
 
 .Tracking-raw-output {

@@ -63,14 +63,14 @@ function Home() {
                     
                     setTrackingRawResponse(JSON.stringify(response, null, 4));
     
-                    // Validate token if it exists
-                    // Save package information in database if user is logged in.
-                    checkToken()
+                    // Save package tracking number in database if user is logged in
+                    addTrackingNumber()
                 })
                 .catch(error => {
                     console.error(error);
                     setTrackingInputMessage("Please enter a valid tracking number.");
                 });
+
             // FedEx selected
             } else if (courier === "FedEx") {
                 setTrackingInputMessage("FedEx is currently not supported.");
@@ -88,28 +88,20 @@ function Home() {
         }
     }
 
-    // Call API to check tokens in local and session storages
-    function checkToken() {
+    // Attempt to save tracking number
+    function addTrackingNumber() {
 
-        var token = "";
+        var token = "-";
         if (localStorage.getItem("token") !== null) {
             token = localStorage.getItem("token");
         } else if (sessionStorage.getItem("token") !== null) {
             token = sessionStorage.getItem("token");
         }
         
-        // Validate token
-        axios.get("http://localhost:8080/validateToken?token=" + token)
+        // Call API to to attempt to save tracking number
+        axios.get("http://localhost:8080/addTrackingNumber?token=" + token + "&trackingNumber=" + trackingNumber)
             .then(response => {
-                if (!response.data) {
-                    sessionStorage.removeItem("token");
-                    localStorage.removeItem("token");
-                    console.log("no valid token, don't save package information")
-                } else {
-                    // Save package information in database
-                    console.log("token is valid, save package information")
-                    // TODO: save package information (tracking number) to database here
-                }
+                    console.log(response.data)
             })
             .catch (error => console.error(error.response))
     }
@@ -150,20 +142,20 @@ function Home() {
 
                     {trackingResponseDataValid &&
                         <div className="Tracking-status-table">
-                        <table>
+                        <table style={{borderSpacing: 0, border: "2px solid white", padding: "10px"}}>
                             <thead>
                                 <tr>
-                                    <th className="Tracking-status-table-header">Date (UTC)</th>
-                                    <th className="Tracking-status-table-header">Location</th>
-                                    <th className="Tracking-status-table-header">Status</th>
+                                    <th style={{borderBottom: "2px solid white", borderRight: "2px solid white", padding: "10px"}} className="Tracking-status-table-header">Date (UTC)</th>
+                                    <th style={{borderBottom: "2px solid white", borderRight: "2px solid white", padding: "10px"}} className="Tracking-status-table-header">Location</th>
+                                    <th style={{borderBottom: "2px solid white", padding: "10px"}} className="Tracking-status-table-header">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {trackingEvents && trackingEvents.map((event, index) =>
                                     <tr key={index}>
-                                        <td className="Tracking-status-table-cell">{event.timestamp}</td>
-                                        <td className="Tracking-status-table-cell">{event.location.address.addressLocality}</td>
-                                        <td className="Tracking-status-table-cell">{event.description}</td>
+                                        <td style={{padding: "10px"}} className="Tracking-status-table-cell">{event.timestamp}</td>
+                                        <td style={{padding: "10px"}} className="Tracking-status-table-cell">{event.location.address.addressLocality}</td>
+                                        <td style={{padding: "10px"}} className="Tracking-status-table-cell">{event.description}</td>
                                     </tr>
                                 )}
                             </tbody>

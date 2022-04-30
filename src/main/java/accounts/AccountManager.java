@@ -84,7 +84,7 @@ public class AccountManager {
         return jtu.getUsernameFromToken(token);
     }
 
-    private boolean validateToken(String token) throws TokenExpiredException{
+    public boolean validateToken(String token) throws TokenExpiredException{
         JwtTokenUtil jtu = new JwtTokenUtil();
 
         if (!jtu.validateToken(token))
