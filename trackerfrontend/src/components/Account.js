@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../App.css";
@@ -7,6 +7,7 @@ function Account() {
 
   const navigate = useNavigate();
   const toLogin = useCallback(() => navigate('/login', {replace: false}), [navigate]);
+  const [trackingNumbers, setTrackingNumbers] = useState(["Loading..."]);
 
 
   // Call checkToken() after component has rendered
@@ -32,6 +33,8 @@ function Account() {
         .then(response => {
             if (!response.data) {
                 toLogin()
+            } else {
+                loadTrackingNumbers(token)
             }
         })
         .catch (error => console.error(error.response))
@@ -44,6 +47,14 @@ function Account() {
     toLogin()
   }
 
+  function loadTrackingNumbers(token) {
+    axios.get("http://localhost:8080/getTrackingNumbers?token=" + token)
+        .then(response => {
+            console.log(response.data)
+            setTrackingNumbers(response.data)
+        })
+        .catch (error => console.error(error.response))
+  }
 
   return (
     <div className="App-body">
@@ -51,13 +62,29 @@ function Account() {
             Account Page
         </h1>
 
-        <div>
-            Account contents
-        </div>
-
-        <button onClick={logout} style={{margin: '1vh'}}>
+        <button onClick={logout} style={{margin: '4vh'}}>
             Back to login page (logout)
         </button>
+
+        <div className="Tracking-status-table">
+            <table style={{borderSpacing: 0, border: "2px solid white"}}>
+                <thead>
+                    <tr>
+                        <th style={{borderBottom: "2px solid white", borderRight: "2px solid white", padding: "10px", width: "30vh", textAlign: "center"}} className="Tracking-status-table-header">Description</th>
+                        <th style={{borderBottom: "2px solid white", padding: "10px", width: "30vh", textAlign: "center"}} className="Tracking-status-table-header">Tracking Numbers</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {trackingNumbers && trackingNumbers.map((trackingNum, key) =>
+                        <tr>
+                            <td style={{padding: "10px 20px 10px 20px"}} className="Tracking-status-table-cell">"description"</td>
+                            <td style={{padding: "10px 20px 10px 20px"}} className="Tracking-status-table-cell">{trackingNum}</td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
+        </div>
+
     </div>
   );
 

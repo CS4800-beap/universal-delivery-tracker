@@ -2,6 +2,7 @@ package edu.cpp.beap.universaldeliverytracker;
 
 import exceptions.AccountExceptions.InvalidIDException;
 import exceptions.TokenExceptions.TokenExpiredException;
+
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.dao.DuplicateKeyException;
@@ -11,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Collections;
+import java.util.List;
 
 import accounts.AccountManager;
 
@@ -69,17 +73,17 @@ public class TrackerController implements ErrorController {
     }
 
     @GetMapping("/getTrackingNumbers")
-    public String getTrackingNumbers(@RequestParam(value = "token") String token){
+    public List<String> getTrackingNumbers(@RequestParam(value = "token") String token){
         AccountManager accountManager = AccountManager.getAccountManager();
         try {
-            return accountManager.getTrackingNumbers(token).toString();
+            return accountManager.getTrackingNumbers(token);
         }catch(TokenExpiredException e){
             e.printStackTrace();
         }catch(InvalidIDException e){
             e.printStackTrace();
         }
 
-        return "failure";
+        return Collections.emptyList();
     }
 
     @GetMapping("/validateToken")
