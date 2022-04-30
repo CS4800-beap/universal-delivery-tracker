@@ -74,8 +74,9 @@ function Home() {
             // FedEx selected
             } else if (courier === "FedEx") {
                 setTrackingInputMessage("FedEx is currently not supported.");
+            // USPS selected
             } else if (courier === "USPS") {
-                setTrackingInputMessage("FedEx is currently not supported.");
+                setTrackingInputMessage("USPS is currently not supported.");
             }// No specific courier selected
              else if (courier === "Select a courier") {
                 setTrackingInputMessage("Please select a courier.");
