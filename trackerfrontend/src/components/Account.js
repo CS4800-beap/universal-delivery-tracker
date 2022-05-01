@@ -70,8 +70,8 @@ function Account() {
             <table style={{borderSpacing: 0, border: "2px solid white"}}>
                 <thead>
                     <tr>
-                        <th style={{borderBottom: "2px solid white", borderRight: "2px solid white", padding: "10px", width: "30vh", textAlign: "center"}} className="Tracking-status-table-header">Description</th>
-                        <th style={{borderBottom: "2px solid white", padding: "10px", width: "30vh", textAlign: "center"}} className="Tracking-status-table-header">Tracking Numbers</th>
+                        <th style={{borderRight: "2px solid white", width: "30vh", textAlign: "center"}} className="Tracking-status-table-header">Description</th>
+                        <th style={{width: "30vh", textAlign: "center"}} className="Tracking-status-table-header">Tracking Numbers</th>
                     </tr>
                 </thead>
                 <tbody>

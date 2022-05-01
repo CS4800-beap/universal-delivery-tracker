@@ -142,25 +142,25 @@ function Home() {
 
                     {trackingResponseDataValid &&
                         <div className="Tracking-status-table">
-                        <table style={{borderSpacing: 0, border: "2px solid white", padding: "10px"}}>
-                            <thead>
-                                <tr>
-                                    <th style={{borderBottom: "2px solid white", borderRight: "2px solid white", padding: "10px"}} className="Tracking-status-table-header">Date (UTC)</th>
-                                    <th style={{borderBottom: "2px solid white", borderRight: "2px solid white", padding: "10px"}} className="Tracking-status-table-header">Location</th>
-                                    <th style={{borderBottom: "2px solid white", padding: "10px"}} className="Tracking-status-table-header">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {trackingEvents && trackingEvents.map((event, index) =>
-                                    <tr key={index}>
-                                        <td style={{padding: "10px"}} className="Tracking-status-table-cell">{event.timestamp}</td>
-                                        <td style={{padding: "10px"}} className="Tracking-status-table-cell">{event.location.address.addressLocality}</td>
-                                        <td style={{padding: "10px"}} className="Tracking-status-table-cell">{event.description}</td>
+                            <table style={{borderSpacing: 0, border: "2px solid white"}}>
+                                <thead>
+                                    <tr>
+                                        <th style={{borderRight: "2px solid white"}} className="Tracking-status-table-header">Date (UTC)</th>
+                                        <th style={{borderRight: "2px solid white"}} className="Tracking-status-table-header">Location</th>
+                                        <th className="Tracking-status-table-header">Status</th>
                                     </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    {trackingEvents && trackingEvents.map((event, index) =>
+                                        <tr key={index}>
+                                            <td className="Tracking-status-table-cell">{event.timestamp}</td>
+                                            <td className="Tracking-status-table-cell">{event.location.address.addressLocality}</td>
+                                            <td className="Tracking-status-table-cell">{event.description}</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
                     }
                     
                     <p className="Tracking-raw-output Tracking-header">Raw Output:</p>

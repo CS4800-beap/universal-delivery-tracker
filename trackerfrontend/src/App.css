@@ -86,16 +86,17 @@ nav {
 }
 
 .Tracking-status-table {
+  padding: 10px;
   text-align: left;
 }
 
 .Tracking-status-table-header {
-  padding-bottom: 1vw;
+  border-bottom: 2px solid white;
+  padding: 10px;
 }
 
 .Tracking-status-table-cell {
-  padding-right: 4vw;
-  padding-bottom: 1vw;
+  padding: 10px;
   vertical-align: top;
   font-size: 20px;
 }
