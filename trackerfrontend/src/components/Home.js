@@ -116,13 +116,13 @@ function Home() {
             .catch (error => console.error(error.response))
     }
 
-    // Attempt to save tracking number
+    // Attempt to save tracking number when logged in
     function addTrackingNumber(event) {
 
-        var nname = prompt('Enter a nickname for the package.')
-        if (nname === null || nname === '')
-            nname = 'No package name'
-        setNickname(nname)
+        var nickName = prompt('Enter a nickname for the package.')
+        if (nickName === null || nickName === '')
+            nickName = 'No package name'
+        setNickname(nickName)
 
         event.preventDefault();
 
@@ -141,6 +141,7 @@ function Home() {
             .catch (error => console.error(error.response))
     }
 
+    // Do not save tracking number when logging in
     function hideSavePrompt(event) {
         event.preventDefault();
         setShowSavePrompt(false);
