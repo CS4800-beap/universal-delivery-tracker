@@ -75,7 +75,7 @@ function Account() {
                     </tr>
                 </thead>
                 <tbody>
-                    {trackingNumbers && trackingNumbers.map((trackingNum, key) =>
+                    {trackingNumbers && trackingNumbers.map((trackingNum, index) =>
                         <tr>
                             <td style={{padding: "10px 20px 10px 20px"}} className="Tracking-status-table-cell">"description"</td>
                             <td style={{padding: "10px 20px 10px 20px"}} className="Tracking-status-table-cell">{trackingNum}</td>
