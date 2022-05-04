@@ -7,8 +7,10 @@ function Nav() {
 
   return (
     <nav>
-        <h3><Link style={{color: "white", textDecoration: "none"}} to="/">
-          <img src={logo} alt="Logo"/></Link>
+        <h3>
+          <Link style={{color: "white", textDecoration: "none"}} to="/">
+            <img src={logo} alt="Logo"/>
+          </Link>
         </h3>
         <ul className="Nav-items">
             <li>
