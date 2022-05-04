@@ -20,6 +20,10 @@ function Home() {
     const [trackingEvents, setTrackingEvents] = useState();
     const [trackingRawResponse, setTrackingRawResponse] = useState();
     
+    // Show prompt if user is logged in
+    const [showSavePrompt, setShowSavePrompt] = useState(false);
+    const [nickname, setNickname] = useState("");
+
     // Detect enter key press
     function handleEnterKeyPress(event) {
         if(event.key === 'Enter') {
@@ -62,9 +66,10 @@ function Home() {
                     }
                     
                     setTrackingRawResponse(JSON.stringify(response, null, 4));
-    
-                    // Save package tracking number in database if user is logged in
-                    addTrackingNumber()
+                    
+                    // If user is logged in, ask them if they want to save the tracking number
+                    checkToken()
+
                 })
                 .catch(error => {
                     console.error(error);
@@ -88,8 +93,38 @@ function Home() {
         }
     }
 
+    // Call API to check tokens in local and session storages
+    function checkToken() {
+        var token = "";
+        if (localStorage.getItem("token") !== null) {
+            token = localStorage.getItem("token")
+        } else if (sessionStorage.getItem("token") !== null) {
+            token = sessionStorage.getItem("token")
+        }
+
+        // Validate token
+        axios.get("http://localhost:8080/validateToken?token=" + token)
+            .then(response => {
+                if (response.data) {
+                    // Ask user if they want to save the tracking number
+                    setShowSavePrompt(true)
+                } else {
+                    sessionStorage.removeItem("token")
+                    localStorage.removeItem("token")
+                }
+            })
+            .catch (error => console.error(error.response))
+    }
+
     // Attempt to save tracking number
-    function addTrackingNumber() {
+    function addTrackingNumber(event) {
+
+        var nname = prompt('Enter a nickname for the package.')
+        if (nname === null || nname === '')
+            nname = 'No package name'
+        setNickname(nname)
+
+        event.preventDefault();
 
         var token = "-";
         if (localStorage.getItem("token") !== null) {
@@ -99,11 +134,16 @@ function Home() {
         }
         
         // Call API to to attempt to save tracking number
-        axios.get("http://localhost:8080/addTrackingNumber?token=" + token + "&trackingNumber=" + trackingNumber)
+        axios.get("http://localhost:8080/addTrackingNumber?token=" + token + "&trackingNumber=" + trackingNumber + "&nickname=" + nickname)
             .then(response => {
                     console.log(response.data)
             })
             .catch (error => console.error(error.response))
+    }
+
+    function hideSavePrompt(event) {
+        event.preventDefault();
+        setShowSavePrompt(false);
     }
 
     return (
@@ -127,6 +167,16 @@ function Home() {
                 </select>
 
                 <button className="Tracking-get-button" onClick={getTracking}>Get Tracking Status</button>
+            </div>
+
+            <div>
+                { showSavePrompt && 
+                <>
+                    <p>Save this tracking number?</p>
+                    <button className="Tracking-get-button Save-button" onClick={addTrackingNumber}>Yes</button>
+                    <button className="Tracking-get-button Save-button" onClick={hideSavePrompt}>No</button>
+                </>
+                }
             </div>
 
             <div className="Tracking-input-div">

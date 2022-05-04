@@ -77,6 +77,12 @@ nav {
   top: 1px;
 }
 
+.Save-button {
+  margin-left: 10px;
+  margin-right: 10px;
+  width:  70px;
+}
+
 .Tracking-output-div {
   margin-top: 5vh;
   width: 80%;

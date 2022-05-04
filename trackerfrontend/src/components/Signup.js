@@ -69,7 +69,7 @@ function Signup() {
         } else {
             axios.get("http://localhost:8080/signup?emailid=" + email + "&password=" + password + "&fname=" + firstName + "&lname=" + lastName)
                 .then(function(response) {
-                    if (response.data !== "success") {
+                    if (response.data !== "true") {
                         setSignupErrorMessage("Failed to create account.")
                         return
                     }
