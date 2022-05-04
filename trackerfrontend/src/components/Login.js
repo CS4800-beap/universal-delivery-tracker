@@ -62,11 +62,11 @@ function Login() {
             axios.get("http://localhost:8080/login?emailid=" + email + "&password=" + password)
             .then(response => {
                 if (response.data === "User Not Found") {
-                    setLoginErrorMessage("Account Not Found.")
+                    setLoginErrorMessage("Account or Password Incorrect.")
                     return
                 }
                 if (response.data === "Incorrect Password") {
-                    setLoginErrorMessage("Incorrect Password.")
+                    setLoginErrorMessage("Account or Password Incorrect.")
                     return
                 }
                 
