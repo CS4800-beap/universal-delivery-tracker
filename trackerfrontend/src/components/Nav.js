@@ -14,9 +14,6 @@ function Nav() {
         </h3>
         <ul className="Nav-items">
             <li>
-              <Link className="Nav-item" to="/">Home</Link>
-            </li>
-            <li>
               <Link className="Nav-item" to="/about">About</Link>
             </li>
             <li>
