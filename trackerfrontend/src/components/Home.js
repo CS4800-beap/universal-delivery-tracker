@@ -5,7 +5,7 @@ import "../App.css";
 function Home() {
     
     const [trackingNumber, setTrackingNumber] = useState("");
-    const courierDropdownItems = ["Select a courier", "DHL", "FedEx", "USPS"];
+    const courierDropdownItems = ["Select a courier", "DHL", "FedEx", "USPS", "UPS"];
     const handleCourierDropdownChange = (event) => {
         setCourier(event.target.value);
       };
@@ -49,7 +49,7 @@ function Home() {
                 .then((response) => {
                     setTrackingResponseValid(true);
                     setTrackingResponseDataValid(true);
-                    
+
                     // Check if response.data.shipments[0].events has all required elements:
                     // timestamp, location.address.addressLocality, description
                     const events = response.data.shipments[0].events;
@@ -57,14 +57,14 @@ function Home() {
                         if (checkedEvent.timestamp == null || checkedEvent.location.address.addressLocality == null || checkedEvent.description == null)
                             setTrackingResponseDataValid(false);
                     })
-    
+
                     // If the response has all required data, assign them to React variables
                     if (trackingResponseDataValid) {
                         setTrackingOrigin(response.data.shipments[0].origin.address.addressLocality);
                         setTrackingDestination(response.data.shipments[0].destination.address.addressLocality);
                         setTrackingEvents(response.data.shipments[0].events);
                     }
-                    
+
                     setTrackingRawResponse(JSON.stringify(response, null, 4));
                     
                     // If user is logged in, ask them if they want to save the tracking number
@@ -82,6 +82,9 @@ function Home() {
             // USPS selected
             } else if (courier === "USPS") {
                 setTrackingInputMessage("USPS is currently not supported.");
+            // UPS selected
+            } else if (courier === "UPS") {
+                setTrackingInputMessage("UPS is currently not supported.")
             }// No specific courier selected
              else if (courier === "Select a courier") {
                 setTrackingInputMessage("Please select a courier.");
