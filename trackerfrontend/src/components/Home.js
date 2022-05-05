@@ -38,6 +38,16 @@ function Home() {
         
         // Check if the user entered a valid tracking number
         if (trackingNumber.length > 0) {
+
+            /*
+                TODO: replace previous API calls with new API call to the back end for tracking results
+                    replace if statements checking which courier was selected and just pass courier into api call as a parameter
+                
+                New call:
+                    axios.get("http://localhost:8080/track?tn=" + trackingNumber + "&courier=" + courier)
+            */
+            
+
             // DHL selected
             if (courier === "DHL") {
                 setTrackingInputMessage("Getting tracking information...");
@@ -137,7 +147,7 @@ function Home() {
         }
         
         // Call API to to attempt to save tracking number
-        axios.get("http://localhost:8080/addTrackingNumber?token=" + token + "&trackingNumber=" + trackingNumber + "&nickname=" + nickname)
+        axios.get("http://localhost:8080/addTrackingNumber?token=" + token + "&trackingNumber=" + trackingNumber + "&nickname=" + nickname + "&courier=" + courier)
             .then(response => {
                     console.log(response.data)
             })

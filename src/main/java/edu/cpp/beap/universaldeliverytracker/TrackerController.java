@@ -105,22 +105,21 @@ public class TrackerController implements ErrorController {
     }
 
     @GetMapping("/track")
-    public String track(@RequestParam(value = "token") String token,
-                        @RequestParam(value = "tn") String tn,
+    public String track(@RequestParam(value = "tn") String tn,
                         @RequestParam(value = "courier") String courier){
         TrackingApiInterface tracker;
         try {
             switch (courier) {
-                case "fedex":
+                case "FedEx":
                     tracker = new FedExTracker();
                     return tracker.getTrackingData(tn);
-                case "dhl":
+                case "DHL":
                     tracker = new DHLTracker();
                     return tracker.getTrackingData(tn);
-                case "usps":
+                case "USPS":
                     tracker = new USPSTracker();
                     return tracker.getTrackingData(tn);
-                case "ups":
+                case "UPS":
                     return "todo";
                 default:
                     break;
