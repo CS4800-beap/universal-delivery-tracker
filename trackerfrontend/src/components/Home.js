@@ -5,7 +5,7 @@ import "../App.css";
 function Home() {
     
     const [trackingNumber, setTrackingNumber] = useState("");
-    const courierDropdownItems = ["Select a courier", "DHL", "FedEx", "USPS", "UPS"];
+    const courierDropdownItems = ["Select a courier", "DHL", "FedEx", "UPS", "USPS"];
     const handleCourierDropdownChange = (event) => {
         setCourier(event.target.value);
       };

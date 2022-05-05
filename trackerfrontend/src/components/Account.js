@@ -79,7 +79,7 @@ function Account() {
         </h1>
 
         <button className="Logout-button" onClick={logout} style={{margin: '4vh'}}>
-            Back to login page (logout)
+            Log out
         </button>
 
         <div className="Tracking-status-table">

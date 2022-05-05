@@ -5,9 +5,10 @@ import "../App.css";
 function About() {
     return (
         <div className="App-body">
-            <a href="http://cs480-projects.github.io/teams-spring2022/Beap/index.html" style={{textDecoration: "underline", color: "white", fontSize:"25px"}}>
+            <a href="http://cs480-projects.github.io/teams-spring2022/Beap/index.html" target="_blank" rel="noreferrer noopener"
+               style={{textDecoration: "underline", color: "white", fontSize:"25px"}}>
                 <h1>
-                About Us
+                    About Us
                 </h1>
             </a>
 
