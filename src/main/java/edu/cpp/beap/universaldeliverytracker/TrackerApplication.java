@@ -1,16 +1,16 @@
 package edu.cpp.beap.universaldeliverytracker;
 
+import trackingAPIs.FedExTracker;
 import accounts.AccountManager;
-import io.jsonwebtoken.Jwt;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import tokens.JwtTokenUtil;
+
+import java.io.IOException;
 
 @SpringBootApplication
 public class TrackerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TrackerApplication.class, args);
-		//AccountManager am = AccountManager.getAccountManager();
 	}
 }

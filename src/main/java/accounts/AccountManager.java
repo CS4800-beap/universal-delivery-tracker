@@ -67,16 +67,23 @@ public class AccountManager {
         return trackingNumbers;
     }
 
-    public boolean addTrackingNumber(String token, String trackingNumber) throws InvalidIDException, TokenExpiredException {
+    public boolean addTrackingNumber(String token, String trackingNumber, String nickname, String courier) throws InvalidIDException, TokenExpiredException {
         validateToken(token);
         String identifier = getUserFromToken(token);
         validateUserID(identifier);
 
-        String sql = "INSERT INTO tracking_numbers (username, tracking_numberscol) VALUES (?, ?);";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(SpringJDBCConfig.getMysqlDataSource());
-        int result = jdbcTemplate.update(sql, identifier, trackingNumber);
+        String sql = "SELECT * FROM tracking_numbers WHERE username = \"" + identifier + "\" AND tracking;";
+        List<String> trackingNumbers = jdbcTemplate.query(sql, new TrackingNumbersMapper());
 
-        return result > 0;
+        if(trackingNumbers.size() == 0){
+            sql = "INSERT INTO tracking_numbers (username, tracking_numberscol, nickname, courier) VALUES (?, ?, ?, ?);";
+            int result = jdbcTemplate.update(sql, identifier, trackingNumber, nickname, courier);
+            return result > 0;
+        }
+        else {
+            return false;
+        }
     }
 
     private String getUserFromToken(String token){
