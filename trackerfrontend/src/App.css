@@ -92,7 +92,22 @@ nav {
   font-size: 15px;
   font-weight: bold;
   height: fit-content;
-  width:  200px;
+  width:  14vh;
+  padding: 10px;
+  border-radius: .5em;
+  border: none;
+}
+
+.Delete-all-button {
+  background-color: #ff675a;
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: bold;
+  height: fit-content;
+  width:  14vh;
   padding: 10px;
   border-radius: .5em;
   border: none;

@@ -8,6 +8,7 @@ function Account() {
   const navigate = useNavigate();
   const toLogin = useCallback(() => navigate('/login', {replace: false}), [navigate]);
   const [trackingNumbers, setTrackingNumbers] = useState(["Loading..."]);
+  const [nickName, setNickName] = useState(["Loading..."]);
 
 
   // Call checkToken() after component has rendered
@@ -35,6 +36,7 @@ function Account() {
                 toLogin()
             } else {
                 loadTrackingNumbers(token)
+                loadNickName(token)
             }
         })
         .catch (error => console.error(error.response))
@@ -56,10 +58,19 @@ function Account() {
         .catch (error => console.error(error.response))
   }
 
+  // WIP
+  function loadNickName(token) {
+      
+  }
+
   // Need to decide whether to enter delete mode or delete according to nick name
   function deleteMode() {
 
   }
+  function deleteAll() {
+
+  }
+
 
   return (
     <div className="App-body">
@@ -75,15 +86,17 @@ function Account() {
             <table style={{borderSpacing: 0, border: "2px solid white"}}>
                 <thead>
                     <tr>
-                        <th style={{borderRight: "2px solid white", width: "30vh", textAlign: "center"}} className="Tracking-status-table-header">Description</th>
-                        <th style={{width: "30vh", textAlign: "center"}} className="Tracking-status-table-header">Tracking Numbers</th>
+                        <th style={{borderRight: "2px solid white", width: "40vh", textAlign: "center"}} className="Tracking-status-table-header">Description (Nickname)</th>
+                        <th style={{borderRight: "2px solid white", width: "30vh", textAlign: "center"}} className="Tracking-status-table-header">Tracking Numbers</th>
+                        <th style={{width: "10vh", textAlign: "center"}} className="Tracking-status-table-header">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {trackingNumbers && trackingNumbers.map((trackingNum, index) =>
+                    {trackingNumbers && trackingNumbers.map((trackingNum, nickName) =>
                         <tr>
-                            <td style={{padding: "10px 20px 10px 20px"}} className="Tracking-status-table-cell">"description"</td>
+                            <td style={{padding: "10px 20px 10px 20px"}} className="Tracking-status-table-cell">{nickName}</td>
                             <td style={{padding: "10px 20px 10px 20px"}} className="Tracking-status-table-cell">{trackingNum}</td>
+                            <button className="Delete-button" onClick={deleteMode}>Delete</button>
                         </tr>
                     )}
                 </tbody>
@@ -91,8 +104,8 @@ function Account() {
         </div>
 
         <div className="delete button">
-            <button className="Delete-button" onClick={deleteMode}>
-                Delete
+            <button className="Delete-all-button" onClick={deleteAll}>
+                Delete all
             </button> 
         </div>
         
