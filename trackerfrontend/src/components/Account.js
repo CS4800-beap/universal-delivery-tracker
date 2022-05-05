@@ -56,13 +56,18 @@ function Account() {
         .catch (error => console.error(error.response))
   }
 
+  // Need to decide whether to enter delete mode or delete according to nick name
+  function deleteMode() {
+
+  }
+
   return (
     <div className="App-body">
         <h1>
             Account Page
         </h1>
 
-        <button onClick={logout} style={{margin: '4vh'}}>
+        <button className="Logout-button" onClick={logout} style={{margin: '4vh'}}>
             Back to login page (logout)
         </button>
 
@@ -84,6 +89,13 @@ function Account() {
                 </tbody>
             </table>
         </div>
+
+        <div className="delete button">
+            <button className="Delete-button" onClick={deleteMode}>
+                Delete
+            </button> 
+        </div>
+        
 
     </div>
   );

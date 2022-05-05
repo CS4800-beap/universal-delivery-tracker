@@ -83,6 +83,36 @@ nav {
   width:  70px;
 }
 
+.Delete-button {
+  background-color: #ff675a;
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: bold;
+  height: fit-content;
+  width:  200px;
+  padding: 10px;
+  border-radius: .5em;
+  border: none;
+}
+
+.Logout-button {
+  background-color: #ff675a;
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: bold;
+  height: fit-content;
+  width:  220px;
+  padding: 10px;
+  border-radius: .5em;
+  border: none;
+}
+
 .Tracking-output-div {
   margin-top: 5vh;
   width: 80%;
