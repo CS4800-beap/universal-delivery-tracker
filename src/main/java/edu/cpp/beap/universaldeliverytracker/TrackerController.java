@@ -13,10 +13,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
 import accounts.AccountManager;
+import trackingAPIs.DHLTracker;
+import trackingAPIs.FedExTracker;
+import trackingAPIs.TrackingApiInterface;
+import trackingAPIs.USPSTracker;
 
 @CrossOrigin
 @RestController
@@ -34,7 +39,8 @@ public class TrackerController implements ErrorController {
     }
 
     @GetMapping("/login")
-    public String login(@RequestParam(value = "emailid") String emailid, @RequestParam(value = "password") String password){
+    public String login(@RequestParam(value = "emailid") String emailid,
+                        @RequestParam(value = "password") String password){
         AccountManager accountManager = AccountManager.getAccountManager();
         try {
             return accountManager.login(emailid, password); // Login successful, return token
@@ -45,7 +51,10 @@ public class TrackerController implements ErrorController {
     }
 
     @GetMapping("/signup")
-    public String signup(@RequestParam(value = "emailid") String emailid, @RequestParam(value = "password") String password, @RequestParam(value = "fname") String fname, @RequestParam(value = "lname") String lname){
+    public String signup(@RequestParam(value = "emailid") String emailid,
+                         @RequestParam(value = "password") String password,
+                         @RequestParam(value = "fname") String fname,
+                         @RequestParam(value = "lname") String lname){
         AccountManager accountManager = AccountManager.getAccountManager();
 
         try{
@@ -58,11 +67,14 @@ public class TrackerController implements ErrorController {
     }
 
     @GetMapping("/addTrackingNumber")
-    public String addTrackingNumber(@RequestParam(value = "token") String token, @RequestParam(value = "trackingNumber") String trackingNumber){
+    public String addTrackingNumber(@RequestParam(value = "token") String token,
+                                    @RequestParam(value = "trackingNumber") String trackingNumber,
+                                    @RequestParam(value = "nickname") String nickname,
+                                    @RequestParam(value = "courier") String courier){
         AccountManager accountManager = AccountManager.getAccountManager();
         try{
-            accountManager.addTrackingNumber(token, trackingNumber);
-            return "success";
+            if(accountManager.addTrackingNumber(token, trackingNumber, nickname, courier))
+                return "success";
         }catch(TokenExpiredException e){
             e.printStackTrace();
         }catch(InvalidIDException e){
@@ -90,5 +102,32 @@ public class TrackerController implements ErrorController {
     public boolean validateToken(@RequestParam(value = "token") String token) throws TokenExpiredException{
         AccountManager accountManager = AccountManager.getAccountManager();
         return accountManager.validateToken(token);        
+    }
+
+    @GetMapping("/track")
+    public String track(@RequestParam(value = "token") String token,
+                        @RequestParam(value = "tn") String tn,
+                        @RequestParam(value = "courier") String courier){
+        TrackingApiInterface tracker;
+        try {
+            switch (courier) {
+                case "fedex":
+                    tracker = new FedExTracker();
+                    return tracker.getTrackingData(tn);
+                case "dhl":
+                    tracker = new DHLTracker();
+                    return tracker.getTrackingData(tn);
+                case "usps":
+                    tracker = new USPSTracker();
+                    return tracker.getTrackingData(tn);
+                case "ups":
+                    return "todo";
+                default:
+                    break;
+            }
+        }catch(IOException e){
+            return "failed to track";
+        }
+        return "failed to track";
     }
 }
