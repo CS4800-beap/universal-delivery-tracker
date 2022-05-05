@@ -83,6 +83,23 @@ nav {
   width:  70px;
 }
 
+.Show-detail-button {
+  background-color: #00ccff;
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: bold;
+  height: fit-content;
+  width:  fit-content;
+  padding: 8px;
+  border-radius: .5em;
+  border: none;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
 .Delete-button {
   background-color: #ff675a;
   cursor: pointer;

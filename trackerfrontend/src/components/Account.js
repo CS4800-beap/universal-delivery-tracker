@@ -9,7 +9,7 @@ function Account() {
   const toLogin = useCallback(() => navigate('/login', {replace: false}), [navigate]);
   const [trackingNumbers, setTrackingNumbers] = useState([""]);
   const [nickName, setNickName] = useState(["Loading..."]);
-  const [courier, setCourier] = useState([""]);
+  const [courier, setCourier] = useState(["Loading..."]);
 
 
   // Call checkToken() after component has rendered
@@ -59,13 +59,18 @@ function Account() {
         .catch (error => console.error(error.response))
   }
 
+  // * TODO *
   // WIP
   function loadNickName(token) {
       
   }
 
+  // * TODO *
   // Need to decide whether to enter delete mode or delete according to nick name
-  function deleteMode() {
+  function ShowButton() {
+
+  }
+  function deleteButton() {
 
   }
   function deleteAll() {
@@ -79,6 +84,10 @@ function Account() {
             Account Page
         </h1>
 
+        <div className="user-name">
+            TODO: user-name show here
+        </div>
+
         <button className="Logout-button" onClick={logout} style={{margin: '4vh'}}>
             Log out
         </button>
@@ -91,6 +100,7 @@ function Account() {
                         <th style={{borderRight: "2px solid white", textAlign: "center"}} className="Tracking-status-table-header">Tracking Numbers</th>
                         <th style={{borderRight: "2px solid white", textAlign: "center"}} className="Tracking-status-table-header">Courier</th>
                         <th style={{width: "10vh", textAlign: "center"}} className="Tracking-status-table-header"></th>
+                        <th style={{width: "10vh", textAlign: "center"}} className="Tracking-status-table-header"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -99,7 +109,8 @@ function Account() {
                             <td style={{padding: "10px 20px 10px 20px"}} className="Tracking-status-table-cell">{nickName[index]}</td>
                             <td style={{padding: "10px 20px 10px 20px"}} className="Tracking-status-table-cell">{trackingNum}</td>
                             <td style={{padding: "10px 20px 10px 20px"}} className="Tracking-status-table-cell">{courier[index]}</td>
-                            <td style={{borderLeft: "2px solid white", textAlign: "center"}} className="Tracking-status-table-cell"><button className="Delete-button" onClick={deleteMode}>Delete</button></td>
+                            <td style={{borderLeft: "2px solid white", textAlign: "center"}} className="Tracking-status-table-cell"><button className="Show-detail-button" onClick={ShowButton}>Show Detail</button></td>
+                            <td style={{borderLeft: "2px solid white", textAlign: "center"}} className="Tracking-status-table-cell"><button className="Delete-button" onClick={deleteButton}>Delete</button></td>
                         </tr>
                     )}
                 </tbody>
