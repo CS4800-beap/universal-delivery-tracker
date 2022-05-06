@@ -11,7 +11,7 @@ function Home() {
       };
     const [courier, setCourier] = useState("Select a courier");
 
-    const [trackingInputMessage, setTrackingInputMessage] = useState();
+    const [trackingInputMessage, setTrackingInputMessage] = useState("");
     const [trackingResponseValid, setTrackingResponseValid] = useState(false);
     const [trackingResponseDataValid, setTrackingResponseDataValid] = useState(false);
 
@@ -22,6 +22,8 @@ function Home() {
     
     // Show prompt if user is logged in
     const [showSavePrompt, setShowSavePrompt] = useState(false);
+    const [savedPrompt, setSavedPrompt] = useState("");
+    const [showSavedPrompt, setShowSavedPrompt] = useState(false);
     const [nickname, setNickname] = useState("");
 
     // Detect enter key press
@@ -36,12 +38,13 @@ function Home() {
         event.preventDefault();
         setTrackingResponseValid(false);
         setShowSavePrompt(false);
+        setShowSavedPrompt(false);
 
         // Check if the user entered a valid tracking number
         if (trackingNumber.length > 0) {
             axios.get("http://localhost:8080/track?tn=" + trackingNumber + "&courier=" + courier)
                 .then((response) => {
-                    if (response === "failed to track") {
+                    if (response.data === "failed to track") {
                         throw new Error("Failed to track")
                     }
                     
@@ -55,8 +58,9 @@ function Home() {
 
                     setTrackingRawResponse(JSON.stringify(response, null, 4));
                     
+                    console.log("qwerqwerqwer")
                     // If user is logged in, ask them if they want to save the tracking number
-                    //checkToken()
+                    checkToken()
                     
                 })
                 .catch(error => {
@@ -126,6 +130,7 @@ function Home() {
 
     // Call API to check tokens in local and session storages
     function checkToken() {
+
         var token = "";
         if (localStorage.getItem("token") !== null) {
             token = localStorage.getItem("token")
@@ -167,7 +172,15 @@ function Home() {
         // Call API to to attempt to save tracking number
         axios.get("http://localhost:8080/addTrackingNumber?token=" + token + "&trackingNumber=" + trackingNumber + "&nickname=" + nickname + "&courier=" + courier)
             .then(response => {
-                    console.log(response.data)
+                console.log(response.data)
+                if (response.data === "success") {
+                    setSavedPrompt("Tracking number saved successfully.");
+                } else {
+                    setSavedPrompt("Failed to save tracking number.");
+                }
+
+                setShowSavePrompt(false);
+                setShowSavedPrompt(true);
             })
             .catch (error => console.error(error.response))
     }
@@ -207,6 +220,11 @@ function Home() {
                     <p>Save this tracking number?</p>
                     <button className="Tracking-get-button Save-button" onClick={addTrackingNumber}>Yes</button>
                     <button className="Tracking-get-button Save-button" onClick={hideSavePrompt}>No</button>
+                </>
+                }
+                { showSavedPrompt && 
+                <>
+                    <p>{savedPrompt}</p>
                 </>
                 }
             </div>

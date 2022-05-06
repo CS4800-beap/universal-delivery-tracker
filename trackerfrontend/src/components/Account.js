@@ -70,12 +70,12 @@ function Account() {
 
   // WIP - TEMP VALUES
   function loadNickNames() {
-    setNickName(["no nickname1", "no nickname2", "no nickname3", "no nickname4", "no nickname5", "no nickname6", "no nickname7", "no nickname8"])
+    setNickName(["no nickname1", "no nickname2", "no nickname3", "no nickname4", "no nickname5", "no nickname6", "no nickname7", "no nickname8", "no nickname9"])
   }
 
   // WIP - TEMP VALUES
   function loadCouriers() {
-    setCourier(["DHL", "DHL", "DHL", "DHL", "DHL", "DHL", "DHL", "DHL"])
+    setCourier(["DHL", "DHL", "?", "?", "?", "?", "?", "DHL", "FedEx"])
   }
 
   // Call tracking API to get tracking number information and display in a popup window
@@ -146,7 +146,7 @@ function Account() {
                         <th style={{borderRight: "2px solid white", width: "40vh", textAlign: "center"}} className="Tracking-status-table-header">Nickname</th>
                         <th style={{borderRight: "2px solid white", textAlign: "center"}} className="Tracking-status-table-header">Tracking Numbers</th>
                         <th style={{borderRight: "2px solid white", textAlign: "center"}} className="Tracking-status-table-header">Courier</th>
-                        <th style={{textAlign: "center"}} className="Tracking-status-table-header"></th>
+                        <th style={{textAlign: "center", width: "13vh"}} className="Tracking-status-table-header"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -154,12 +154,18 @@ function Account() {
                         <tr>
                             <td style={{padding: "10px 20px 10px 20px"}} className="Tracking-status-table-cell">{nickName[index]}</td>
                             <td style={{padding: "10px 20px 10px 20px"}} className="Tracking-status-table-cell">
-                                <div style={{padding: "2px", cursor: "pointer", width: "fit-content"}}>
+                                <div style={{padding: "2px", width: "fit-content"}}>
                                     {trackingNum}
                                 </div>
                             </td>
                             <td style={{padding: "10px 20px 10px 20px"}} className="Tracking-status-table-cell">{courier[index]}</td>
-                            <td style={{textAlign: "center"}} className="Tracking-status-table-cell"><button className="Show-detail-button" onClick={() => {track(trackingNum, nickName[index], courier[index]) }}>Show Details</button></td>
+                            <td style={{textAlign: "center"}} className="Tracking-status-table-cell">
+                                { trackingNum !== "" &&
+                                    <button className="Show-detail-button" onClick={() => {track(trackingNum, nickName[index], courier[index]) }}>
+                                        Show Details
+                                    </button>
+                                }
+                            </td>
                         </tr>
                     )}
                 </tbody>

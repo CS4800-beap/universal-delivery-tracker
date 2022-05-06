@@ -73,7 +73,7 @@ public class AccountManager {
         validateUserID(identifier);
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate(SpringJDBCConfig.getMysqlDataSource());
-        String sql = "SELECT * FROM tracking_numbers WHERE username = \"" + identifier + "\" AND tracking;";
+        String sql = "SELECT * FROM tracking_numbers WHERE username = \"" + identifier + "\" AND tracking_numberscol = \"" + trackingNumber +"\";";
         List<String> trackingNumbers = jdbcTemplate.query(sql, new TrackingNumbersMapper());
 
         if(trackingNumbers.size() == 0){
