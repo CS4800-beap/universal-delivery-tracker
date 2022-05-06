@@ -54,50 +54,17 @@ function Home() {
 
                     console.log(response.data)
                     
-                    // TODO: PARSE DATA FROM RESPONSE
-
-                    setTrackingRawResponse(JSON.stringify(response, null, 4));
-                    
-                    console.log("qwerqwerqwer")
-                    // If user is logged in, ask them if they want to save the tracking number
-                    checkToken()
-                    
-                })
-                .catch(error => {
-                    console.error(error);
-                    setTrackingInputMessage("Please enter a valid tracking number.");
-                });
-            
-            /* ----- OLD CODE -----
-            // DHL selected
-            if (courier === "DHL") {
-                setTrackingInputMessage("Getting tracking information...");
-
-                // Send HTTP GET request to DHL's track/shipments API endpoint with the user's tracking number
-                axios.get("https://api-eu.dhl.com/track/shipments?trackingNumber=" + trackingNumber, {
-                    headers: {"DHL-API-Key": process.env.REACT_APP_DHL_API_KEY}
-                })
-                .then((response) => {
-                    setTrackingResponseValid(true);
-                    setTrackingResponseDataValid(true);
-
-                    // Check if response.data.shipments[0].events has all required elements:
-                    // timestamp, location.address.addressLocality, description
-                    const events = response.data.shipments[0].events;
-                    events.forEach(function(checkedEvent) {
-                        if (checkedEvent.timestamp == null || checkedEvent.location.address.addressLocality == null || checkedEvent.description == null)
-                            setTrackingResponseDataValid(false);
-                    })
-
-                    // If the response has all required data, assign them to React variables
+                    // TODO: PARSE DATA FROM RESPONSE ------- WIP
                     if (trackingResponseDataValid) {
                         setTrackingOrigin(response.data.shipments[0].origin.address.addressLocality);
                         setTrackingDestination(response.data.shipments[0].destination.address.addressLocality);
                         setTrackingEvents(response.data.shipments[0].events);
                     }
 
+
                     setTrackingRawResponse(JSON.stringify(response, null, 4));
                     
+                    console.log("qwerqwerqwer")
                     // If user is logged in, ask them if they want to save the tracking number
                     checkToken()
 
@@ -106,26 +73,68 @@ function Home() {
                     console.error(error);
                     setTrackingInputMessage("Please enter a valid tracking number.");
                 });
-
-            // FedEx selected
-            } else if (courier === "FedEx") {
-                //setTrackingInputMessage("FedEx is currently not supported.");
-            // USPS selected
-            } else if (courier === "USPS") {
-                setTrackingInputMessage("USPS is currently not supported.");
-            // UPS selected
-            } else if (courier === "UPS") {
-                setTrackingInputMessage("UPS is currently not supported.")
-            }// No specific courier selected
-             else if (courier === "Select a courier") {
-                setTrackingInputMessage("Please select a courier.");
-            }
-            */
             
-        // No tracking number is entered
-        } else if (trackingNumber.length === 0) {
-            setTrackingInputMessage("Please enter a valid tracking number.");
+        /* ----- OLD CODE -----
+        // DHL selected
+        if (courier === "DHL") {
+            setTrackingInputMessage("Getting tracking information...");
+
+            // Send HTTP GET request to DHL's track/shipments API endpoint with the user's tracking number
+            axios.get("https://api-eu.dhl.com/track/shipments?trackingNumber=" + trackingNumber, {
+                headers: {"DHL-API-Key": process.env.REACT_APP_DHL_API_KEY}
+            })
+            .then((response) => {
+                setTrackingResponseValid(true);
+                setTrackingResponseDataValid(true);
+
+                // Check if response.data.shipments[0].events has all required elements:
+                // timestamp, location.address.addressLocality, description
+                const events = response.data.shipments[0].events;
+                events.forEach(function(checkedEvent) {
+                    if (checkedEvent.timestamp == null || checkedEvent.location.address.addressLocality == null || checkedEvent.description == null)
+                        setTrackingResponseDataValid(false);
+                })
+
+                // If the response has all required data, assign them to React variables
+                if (trackingResponseDataValid) {
+                    setTrackingOrigin(response.data.shipments[0].origin.address.addressLocality);
+                    setTrackingDestination(response.data.shipments[0].destination.address.addressLocality);
+                    setTrackingEvents(response.data.shipments[0].events);
+                }
+
+                setTrackingRawResponse(JSON.stringify(response, null, 4));
+                
+                // If user is logged in, ask them if they want to save the tracking number
+                checkToken()
+
+            })
+            .catch(error => {
+                console.error(error);
+                setTrackingInputMessage("Please enter a valid tracking number.");
+            });
+
+        // FedEx selected
+        } else if (courier === "FedEx") {
+            //setTrackingInputMessage("FedEx is currently not supported.");
+        // USPS selected
+        } else if (courier === "USPS") {
+            setTrackingInputMessage("USPS is currently not supported.");
+        // UPS selected
+        } else if (courier === "UPS") {
+            setTrackingInputMessage("UPS is currently not supported.")
+        }// No specific courier selected
+        else if (courier === "Select a courier") {
+            setTrackingInputMessage("Please select a courier.");
         }
+        */
+                
+            // No tracking number is entered
+            } else if (trackingNumber.length === 0) {
+                setTrackingInputMessage("Please enter a valid tracking number.");
+            }
+
+
+
     }
 
     // Call API to check tokens in local and session storages
