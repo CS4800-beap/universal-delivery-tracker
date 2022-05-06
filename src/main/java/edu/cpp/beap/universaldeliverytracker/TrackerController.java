@@ -100,6 +100,8 @@ public class TrackerController implements ErrorController {
 
     @GetMapping("/validateToken")
     public boolean validateToken(@RequestParam(value = "token") String token) throws TokenExpiredException{
+        if (token.length() < 1)
+            return false;
         AccountManager accountManager = AccountManager.getAccountManager();
         return accountManager.validateToken(token);        
     }

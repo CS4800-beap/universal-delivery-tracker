@@ -35,19 +35,36 @@ function Home() {
     function getTracking(event) {
         event.preventDefault();
         setTrackingResponseValid(false);
-        
+        setShowSavePrompt(false);
+
         // Check if the user entered a valid tracking number
         if (trackingNumber.length > 0) {
+            axios.get("http://localhost:8080/track?tn=" + trackingNumber + "&courier=" + courier)
+                .then((response) => {
+                    if (response === "failed to track") {
+                        throw new Error("Failed to track")
+                    }
+                    
+                    // Tracking number is valid
+                    setTrackingResponseValid(true);
+                    setTrackingResponseDataValid(true);
 
-            /*
-                TODO: replace previous API calls with new API call to the back end for tracking results
-                    replace if statements checking which courier was selected and just pass courier into api call as a parameter
-                
-                New call:
-                    axios.get("http://localhost:8080/track?tn=" + trackingNumber + "&courier=" + courier)
-            */
+                    console.log(response.data)
+                    
+                    // TODO: PARSE DATA FROM RESPONSE
+
+                    setTrackingRawResponse(JSON.stringify(response, null, 4));
+                    
+                    // If user is logged in, ask them if they want to save the tracking number
+                    //checkToken()
+                    
+                })
+                .catch(error => {
+                    console.error(error);
+                    setTrackingInputMessage("Please enter a valid tracking number.");
+                });
             
-
+            /* ----- OLD CODE -----
             // DHL selected
             if (courier === "DHL") {
                 setTrackingInputMessage("Getting tracking information...");
@@ -88,7 +105,7 @@ function Home() {
 
             // FedEx selected
             } else if (courier === "FedEx") {
-                setTrackingInputMessage("FedEx is currently not supported.");
+                //setTrackingInputMessage("FedEx is currently not supported.");
             // USPS selected
             } else if (courier === "USPS") {
                 setTrackingInputMessage("USPS is currently not supported.");
@@ -98,7 +115,8 @@ function Home() {
             }// No specific courier selected
              else if (courier === "Select a courier") {
                 setTrackingInputMessage("Please select a courier.");
-            } 
+            }
+            */
             
         // No tracking number is entered
         } else if (trackingNumber.length === 0) {
@@ -139,7 +157,7 @@ function Home() {
 
         event.preventDefault();
 
-        var token = "-";
+        var token = "";
         if (localStorage.getItem("token") !== null) {
             token = localStorage.getItem("token");
         } else if (sessionStorage.getItem("token") !== null) {
@@ -199,7 +217,7 @@ function Home() {
                 }
             </div>
             
-            {(courier === "DHL" && trackingResponseValid) &&
+            {(trackingResponseValid) &&
                 <div className="Tracking-output-div">
                     <p className="Tracking-header">Origin: {trackingOrigin}</p>
                     <p className="Tracking-header">Destination: {trackingDestination}</p>
