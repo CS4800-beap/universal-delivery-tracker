@@ -10,6 +10,6 @@ import java.util.List;
 public class TrackingNumbersMapper implements RowMapper<String> {
     @Override
     public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return rs.getString("tracking_numberscol");
+        return rs.getString("tracking_numberscol") + ";" + rs.getString("nickname") + ";" + rs.getString("courier");
     }
 }
