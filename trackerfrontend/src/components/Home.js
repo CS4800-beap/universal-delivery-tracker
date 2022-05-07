@@ -47,29 +47,47 @@ function Home() {
                     if (response.data === "failed to track") {
                         throw new Error("Failed to track")
                     }
+
+                    // TODO: PARSE DATA FROM RESPONSE ------- WIP
+                    if (courier === "DHL") {
+                        if (response.data === "") { // Not sure why, but this works
+                            throw new Error("Failed to track")
+                        } else {
+                            setTrackingOrigin(response.data.shipments[0].origin.address.addressLocality);
+                            setTrackingDestination(response.data.shipments[0].destination.address.addressLocality);
+                            setTrackingEvents(response.data.shipments[0].events);
+                        }
+                    // FedEx selected
+                    } else if (courier === "FedEx") {
+                        setTrackingInputMessage("FedEx is currently not supported.");
+                    // USPS selected
+                    } else if (courier === "USPS") {
+                        setTrackingInputMessage("USPS is currently not supported.");
+                    // UPS selected
+                    } else if (courier === "UPS") {
+                        setTrackingInputMessage("UPS is currently not supported.")
+                    }// No specific courier selected
+                    else if (courier === "Select a courier") {
+                        setTrackingInputMessage("Please select a courier.");
+                    }
                     
                     // Tracking number is valid
                     setTrackingResponseValid(true);
                     setTrackingResponseDataValid(true);
 
                     console.log(response.data)
+                    console.log(JSON.stringify(response, null, 4))
                     
-                    // TODO: PARSE DATA FROM RESPONSE ------- WIP
-                    if (trackingResponseDataValid) {
-                        setTrackingOrigin(response.data.shipments[0].origin.address.addressLocality);
-                        setTrackingDestination(response.data.shipments[0].destination.address.addressLocality);
-                        setTrackingEvents(response.data.shipments[0].events);
-                    }
-
-
                     setTrackingRawResponse(JSON.stringify(response, null, 4));
                     
-                    console.log("qwerqwerqwer")
+                    // console.log("qwerqwerqwer")
                     // If user is logged in, ask them if they want to save the tracking number
                     checkToken()
 
                 })
                 .catch(error => {
+                    setTrackingResponseValid(false);
+                    setTrackingResponseDataValid(false);
                     console.error(error);
                     setTrackingInputMessage("Please enter a valid tracking number.");
                 });
