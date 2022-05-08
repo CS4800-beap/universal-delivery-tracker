@@ -53,13 +53,25 @@ function Home() {
                         if (response.data === "") { // Not sure why, but this works
                             throw new Error("Failed to track")
                         } else {
+                            setTrackingOrigin()
                             setTrackingOrigin(response.data.shipments[0].origin.address.addressLocality);
+                            setTrackingDestination()
                             setTrackingDestination(response.data.shipments[0].destination.address.addressLocality);
+                            setTrackingEvents()
                             setTrackingEvents(response.data.shipments[0].events);
+                            // console.log(response.data.shipments[0].events)
                         }
                     // FedEx selected
                     } else if (courier === "FedEx") {
-                        setTrackingInputMessage("FedEx is currently not supported.");
+                        setTrackingOrigin()
+                        setTrackingOrigin(response.data.output.completeTrackResults[0].trackResults[0].originLocation.locationContactAndAddress.address.city);
+                        // setTrackingDestination(response.data.output.completeTrackResults[0].trackResults[0].deliveryDetails.actualDeliveryAddress.city); // This is from deliveryDetails
+                        setTrackingDestination()
+                        setTrackingDestination(response.data.output.completeTrackResults[0].trackResults[0].lastUpdatedDestinationAddress.city);  // This is from lastUpdatedDestinationAddress
+                        // console.log(response.data.output.completeTrackResults[0].trackResults[0].dateAndTimes)
+                        setTrackingEvents()
+                        setTrackingEvents(response.data.output.completeTrackResults[0].trackResults[0].dateAndTimes);
+                        // setTrackingInputMessage("FedEx is currently not supported.");
                     // USPS selected
                     } else if (courier === "USPS") {
                         setTrackingInputMessage("USPS is currently not supported.");
@@ -75,8 +87,8 @@ function Home() {
                     setTrackingResponseValid(true);
                     setTrackingResponseDataValid(true);
 
-                    console.log(response.data)
-                    console.log(JSON.stringify(response, null, 4))
+                    // console.log(response.data)
+                    // console.log(JSON.stringify(response, null, 4))
                     
                     setTrackingRawResponse(JSON.stringify(response, null, 4));
                     
@@ -277,6 +289,7 @@ function Home() {
                                         <th className="Tracking-status-table-header">Status</th>
                                     </tr>
                                 </thead>
+{/* ---------------- Notice! Do NOT delete the code here ----------------
                                 <tbody>
                                     {trackingEvents && trackingEvents.map((event, index) =>
                                         <tr key={index}>
@@ -285,8 +298,21 @@ function Home() {
                                             <td className="Tracking-status-table-cell">{event.description}</td>
                                         </tr>
                                     )}
+                                </tbody> */}
+
+                                <tbody>
+                                    {trackingEvents && trackingEvents.map((dateAndTimes, index) =>
+                                    <tr key={index}>
+                                        <td className="Tracking-status-table-cell">{dateAndTimes.dateTime}</td>
+                                        <td className="Tracking-status-table-cell">{"no data"}</td>
+                                        <td className="Tracking-status-table-cell">{dateAndTimes.type}</td>
+                                    </tr>
+                                    )}
                                 </tbody>
+
                             </table>
+
+
                         </div>
                     }
                     
