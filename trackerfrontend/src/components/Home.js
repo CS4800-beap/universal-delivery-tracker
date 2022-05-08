@@ -53,23 +53,23 @@ function Home() {
                         if (response.data === "") { // Not sure why, but this works
                             throw new Error("Failed to track")
                         } else {
-                            setTrackingOrigin()
+                            // setTrackingOrigin()
                             setTrackingOrigin(response.data.shipments[0].origin.address.addressLocality);
-                            setTrackingDestination()
+                            // setTrackingDestination()
                             setTrackingDestination(response.data.shipments[0].destination.address.addressLocality);
-                            setTrackingEvents()
+                            // setTrackingEvents()
                             setTrackingEvents(response.data.shipments[0].events);
                             // console.log(response.data.shipments[0].events)
                         }
                     // FedEx selected
                     } else if (courier === "FedEx") {
-                        setTrackingOrigin()
+                        // setTrackingOrigin()
                         setTrackingOrigin(response.data.output.completeTrackResults[0].trackResults[0].originLocation.locationContactAndAddress.address.city);
                         // setTrackingDestination(response.data.output.completeTrackResults[0].trackResults[0].deliveryDetails.actualDeliveryAddress.city); // This is from deliveryDetails
-                        setTrackingDestination()
+                        // setTrackingDestination()
                         setTrackingDestination(response.data.output.completeTrackResults[0].trackResults[0].lastUpdatedDestinationAddress.city);  // This is from lastUpdatedDestinationAddress
                         // console.log(response.data.output.completeTrackResults[0].trackResults[0].dateAndTimes)
-                        setTrackingEvents()
+                        // setTrackingEvents()
                         setTrackingEvents(response.data.output.completeTrackResults[0].trackResults[0].dateAndTimes);
                         // setTrackingInputMessage("FedEx is currently not supported.");
                     // USPS selected
@@ -279,7 +279,7 @@ function Home() {
                     <p className="Tracking-header">Origin: {trackingOrigin}</p>
                     <p className="Tracking-header">Destination: {trackingDestination}</p>
 
-                    {trackingResponseDataValid &&
+                    {trackingResponseDataValid && courier=="DHL" &&
                         <div className="Tracking-status-table">
                             <table style={{borderSpacing: 0, border: "2px solid white"}}>
                                 <thead>
@@ -289,7 +289,6 @@ function Home() {
                                         <th className="Tracking-status-table-header">Status</th>
                                     </tr>
                                 </thead>
-{/* ---------------- Notice! Do NOT delete the code here ----------------
                                 <tbody>
                                     {trackingEvents && trackingEvents.map((event, index) =>
                                         <tr key={index}>
@@ -298,21 +297,30 @@ function Home() {
                                             <td className="Tracking-status-table-cell">{event.description}</td>
                                         </tr>
                                     )}
-                                </tbody> */}
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+
+                    {trackingResponseDataValid && courier=="FedEx" &&
+                        <div className="Tracking-status-table">
+                            <table style={{borderSpacing: 0, border: "2px solid white"}}>
+                                <thead>
+                                    <tr>
+                                        <th style={{borderRight: "2px solid white"}} className="Tracking-status-table-header">Date (UTC)</th>
+                                        <th className="Tracking-status-table-header">Status</th>
+                                    </tr>
+                                </thead>
 
                                 <tbody>
                                     {trackingEvents && trackingEvents.map((dateAndTimes, index) =>
                                     <tr key={index}>
                                         <td className="Tracking-status-table-cell">{dateAndTimes.dateTime}</td>
-                                        <td className="Tracking-status-table-cell">{"no data"}</td>
                                         <td className="Tracking-status-table-cell">{dateAndTimes.type}</td>
                                     </tr>
                                     )}
                                 </tbody>
-
                             </table>
-
-
                         </div>
                     }
                     
