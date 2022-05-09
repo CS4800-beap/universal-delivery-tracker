@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../App.css";
 
 function Home() {
@@ -10,6 +10,7 @@ function Home() {
         setCourier(event.target.value);
       };
     const [courier, setCourier] = useState("Select a courier");
+    const [courierDisplay, setCourierDisplay] = useState("Select a courier");
 
     const [trackingInputMessage, setTrackingInputMessage] = useState("");
     const [trackingResponseValid, setTrackingResponseValid] = useState(false);
@@ -32,41 +33,48 @@ function Home() {
         }
     }
 
+
     // Get tracking information
     function getTracking(event) {
-        event.preventDefault();
+        event.preventDefault()
+        
         setTrackingResponseValid(false);
         setShowSavePrompt(false);
         setShowSavedPrompt(false);
+
+
+        var courierSubmit = courier
+        setCourierDisplay(courierSubmit)
+
 
         // Check if the user entered a valid tracking number
         if (trackingNumber.length > 0) {
 
             // TEMP CODE: dont run API call if unsupported courier is selected
-            if (courier === "USPS") {
+            if (courierSubmit === "USPS") {
                 setTrackingInputMessage("USPS is currently not supported.")
                 console.log("USPS is currently not supported.")
                 return
             // UPS selected
-            } else if (courier === "UPS") {
+            } else if (courierSubmit === "UPS") {
                 setTrackingInputMessage("UPS is currently not supported.")
                 console.log("UPS is currently not supported.")
                 return
             }// No specific courier selected
-            else if (courier === "Select a courier") {
+            else if (courierSubmit === "Select a courier") {
                 setTrackingInputMessage("Please select a courier.")
                 console.log("No courier selected.")
                 return
             }
 
-            axios.get("http://localhost:8080/track?tn=" + trackingNumber + "&courier=" + courier)
+            axios.get("http://localhost:8080/track?tn=" + trackingNumber + "&courier=" + courierSubmit)
                 .then((response) => {
                     if (response.data === "failed to track") {
                         throw new Error("Failed to track")
                     }
 
                     // TODO: PARSE DATA FROM RESPONSE ------- WIP
-                    if (courier === "DHL") {
+                    if (courierSubmit === "DHL") {
                         if (response.data === "") { // Not sure why, but this works
                             throw new Error("Failed to track")
                         } else {
@@ -79,7 +87,7 @@ function Home() {
                             // console.log(response.data.shipments[0].events)
                         }
                     // FedEx selected
-                    } else if (courier === "FedEx") {
+                    } else if (courierSubmit === "FedEx") {
                         // setTrackingOrigin()
                         setTrackingOrigin(response.data.output.completeTrackResults[0].trackResults[0].originLocation.locationContactAndAddress.address.city);
                         // setTrackingDestination(response.data.output.completeTrackResults[0].trackResults[0].deliveryDetails.actualDeliveryAddress.city); // This is from deliveryDetails
@@ -90,13 +98,13 @@ function Home() {
                         setTrackingEvents(response.data.output.completeTrackResults[0].trackResults[0].dateAndTimes);
                         // setTrackingInputMessage("FedEx is currently not supported.");
                     // USPS selected
-                    } else if (courier === "USPS") {
+                    } else if (courierSubmit === "USPS") {
                         setTrackingInputMessage("USPS is currently not supported.")
                     // UPS selected
-                    } else if (courier === "UPS") {
+                    } else if (courierSubmit === "UPS") {
                         setTrackingInputMessage("UPS is currently not supported.")
                     }// No specific courier selected
-                    else if (courier === "Select a courier") {
+                    else if (courierSubmit === "Select a courier") {
                         setTrackingInputMessage("Please select a courier.")
                     }
                     
@@ -109,7 +117,6 @@ function Home() {
                     
                     setTrackingRawResponse(JSON.stringify(response, null, 4));
                     
-                    // console.log("qwerqwerqwer")
                     // If user is logged in, ask them if they want to save the tracking number
                     checkToken()
 
@@ -123,7 +130,7 @@ function Home() {
             
         /* ----- OLD CODE -----
         // DHL selected
-        if (courier === "DHL") {
+        if (courierSubmit === "DHL") {
             setTrackingInputMessage("Getting tracking information...");
 
             // Send HTTP GET request to DHL's track/shipments API endpoint with the user's tracking number
@@ -161,16 +168,16 @@ function Home() {
             });
 
         // FedEx selected
-        } else if (courier === "FedEx") {
+        } else if (courierSubmit === "FedEx") {
             //setTrackingInputMessage("FedEx is currently not supported.");
         // USPS selected
-        } else if (courier === "USPS") {
+        } else if (courierSubmit === "USPS") {
             setTrackingInputMessage("USPS is currently not supported.");
         // UPS selected
-        } else if (courier === "UPS") {
+        } else if (courierSubmit === "UPS") {
             setTrackingInputMessage("UPS is currently not supported.")
-        }// No specific courier selected
-        else if (courier === "Select a courier") {
+        }// No specific courierSubmit selected
+        else if (courierSubmit === "Select a courier") {
             setTrackingInputMessage("Please select a courier.");
         }
         */
@@ -222,9 +229,10 @@ function Home() {
             token = sessionStorage.getItem("token");
         }
         
+        var courierSubmit = courier
 
         // Call API to to attempt to save tracking number
-        axios.get("http://localhost:8080/addTrackingNumber?token=" + token + "&trackingNumber=" + trackingNumber + "&nickname=" + nickname + "&courier=" + courier)
+        axios.get("http://localhost:8080/addTrackingNumber?token=" + token + "&trackingNumber=" + trackingNumber + "&nickname=" + nickname + "&courier=" + courierSubmit)
             .then(response => {
                 // console.log(response.data)
                 if (response.data === "success") {
@@ -294,7 +302,7 @@ function Home() {
                     <p className="Tracking-header">Origin: {trackingOrigin}</p>
                     <p className="Tracking-header">Destination: {trackingDestination}</p>
 
-                    {trackingResponseDataValid && courier=="DHL" &&
+                    {trackingResponseDataValid && courierDisplay=="DHL" &&
                         <div className="Tracking-status-table">
                             <table style={{borderSpacing: 0, border: "2px solid white"}}>
                                 <thead>
@@ -317,7 +325,7 @@ function Home() {
                         </div>
                     }
 
-                    {trackingResponseDataValid && courier=="FedEx" &&
+                    {trackingResponseDataValid && courierDisplay=="FedEx" &&
                         <div className="Tracking-status-table">
                             <table style={{borderSpacing: 0, border: "2px solid white"}}>
                                 <thead>
