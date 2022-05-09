@@ -101,7 +101,8 @@ function Account() {
     setCurrCourier(courier)
     setCurrTrackingNum(trackingNum)
     //console.log("tracking: ", trackingNum, " from ", courier)
-    
+    //console.log(trackingEvents)
+
     // Call tracking API
     axios.get("http://localhost:8080/track?tn=" + trackingNum + "&courier=" + courier)
         .then((response) => {
@@ -154,7 +155,15 @@ function Account() {
     // Display information in a popup window
     setShowPopup(true)
   }
-  
+
+// Hide popup and clear current tracking number information
+function hidePopup() {
+    setShowPopup(false)
+    setTrackingOrigin("")
+    setTrackingDestination("")
+    setTrackingEvents("")
+}
+
   function deleteButton() {
     console.log("delete button pressed:\n",
                 "nickname: ", currNickname, "\n",
@@ -234,7 +243,7 @@ function Account() {
                 <div className="Popup" onClick={null}>
                     <header className="Popup-Header">
                         <div className="Popup-Title">{currNickname} - {currCourier}</div>
-                        <button className="Popup-Close" onClick={() => setShowPopup(false)}>x</button>
+                        <button className="Popup-Close" onClick={hidePopup}>x</button>
                     </header>
 
                     <div className="Popup-Content">
