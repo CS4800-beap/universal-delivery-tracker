@@ -12,11 +12,11 @@ function Signup() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [rememberMeChecked, setChecked] = useState(false);
+    //const [rememberMeChecked, setChecked] = useState(false);
     const [signupErrorMessage, setSignupErrorMessage] = useState("");
     // https://www.robinwieruch.de/react-checkbox/
 
-    const handleChange = () => { setChecked(!rememberMeChecked); };
+    //const handleChange = () => { setChecked(!rememberMeChecked); };
 
     const navigate = useNavigate();
     const toAccount = useCallback(() => navigate('/account', {replace: false}), [navigate]);
