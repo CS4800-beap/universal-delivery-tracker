@@ -8,6 +8,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import tokens.JwtTokenUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AccountManager {
@@ -36,23 +37,30 @@ public class AccountManager {
         return result > 0;
     }
 
-    public String login(String email, String pwd) throws InvalidIDException{
+    public String login(String email, String pwd) throws InvalidIDException {
         String sql = "SELECT * FROM users WHERE email = \"" + email + "\";";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(SpringJDBCConfig.getMysqlDataSource());
         List<UserAccount> accounts = jdbcTemplate.query(sql, new UserAccountMapper());
 
-        if(accounts.size() <= 0){
+        if (accounts.size() <= 0) {
             throw new InvalidIDException("User Not Found");
         }
 
         boolean loggedIn = accounts.get(0).checkPassword(pwd);
-        if(!loggedIn){
+        if (!loggedIn) {
             return "Incorrect Password";
-        }
-        else{
+        } else {
             JwtTokenUtil tokens = new JwtTokenUtil();
             return tokens.generateToken(accounts.get(0));
         }
+    }
+
+    public List<String> getTrackingDetailsFromEmail(String email){
+        String sql = "SELECT * FROM tracking_numbers WHERE email = \"" + email + "\";";
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(SpringJDBCConfig.getMysqlDataSource());
+        List<String> trackingNumbers = jdbcTemplate.query(sql, new TrackingNumbersMapper());
+
+        return trackingNumbers;
     }
 
     public List<String> getTrackingNumbers(String token) throws TokenExpiredException, InvalidIDException{
@@ -109,5 +117,15 @@ public class AccountManager {
             throw new InvalidIDException("Invalid Username");
 
         return true;
+    }
+
+    public List<String> getEmails(){
+        String sql = "SELECT * FROM users;";
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(SpringJDBCConfig.getMysqlDataSource());
+        List<UserAccount> accounts = jdbcTemplate.query(sql, new UserAccountMapper());
+        List<String> emails = new ArrayList<String>();
+        for(UserAccount ua : accounts)
+            emails.add(ua.getEmail());
+        return emails;
     }
 }
