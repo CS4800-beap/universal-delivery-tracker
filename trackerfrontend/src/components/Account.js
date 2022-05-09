@@ -13,8 +13,12 @@ function Account() {
   
   const [showPopup, setShowPopup] = useState(false);
   const [currNickname, setCurrNickname] = useState("");
-  const [currTrackingNum, setCurrTrackingNum] = useState(""); // Temp
+  const [currTrackingNum, setCurrTrackingNum] = useState("");
   const [currCourier, setCurrCourier] = useState("");
+
+  const [trackingOrigin, setTrackingOrigin] = useState();
+  const [trackingDestination, setTrackingDestination] = useState();
+  const [trackingEvents, setTrackingEvents] = useState();
   const [trackingRawResponse, setTrackingRawResponse] = useState();
 
 
@@ -105,16 +109,41 @@ function Account() {
                 throw new Error("Failed to track")
             }
             
-            // Tracking number is valid
-            //console.log(response.data)
-            
-            //setTrackingRawResponse(response.data)
-            
+            // TODO: PARSE DATA FROM RESPONSE ------- WIP
+            if (courier === "DHL") {
+                if (response.data === "") { // Not sure why, but this works
+                    throw new Error("Failed to track")
+                } else {
+                    try {
+                        setTrackingOrigin(response.data.shipments[0].origin.address.addressLocality);
+                        setTrackingDestination(response.data.shipments[0].destination.address.addressLocality);
+                        setTrackingEvents(response.data.shipments[0].events);
+                    } catch (error) {
+                        throw new Error(error)
+                    }
+                }
+            // FedEx selected
+            } else if (courier === "FedEx") {
+                try {
+                    setTrackingOrigin(response.data.output.completeTrackResults[0].trackResults[0].originLocation.locationContactAndAddress.address.city);
+                    setTrackingDestination(response.data.output.completeTrackResults[0].trackResults[0].lastUpdatedDestinationAddress.city);  // This is from lastUpdatedDestinationAddress
+                    setTrackingEvents(response.data.output.completeTrackResults[0].trackResults[0].dateAndTimes);
+                } catch (error) {
+                    throw new Error(error)
+                }
+            // USPS selected
+            } else if (courier === "USPS") {
+                console.error("USPS is currently not supported.")
+            // UPS selected
+            } else if (courier === "UPS") {
+                console.error("UPS is currently not supported.")
+            }// No specific courier selected
+            else {
+                console.error("No courier was specified for the object.")
+            }
+
 
             setTrackingRawResponse(JSON.stringify(response, null, 4));
-            
-            // If user is logged in, ask them if they want to save the tracking number
-            //checkToken()
             
         })
         .catch(error => {
@@ -199,6 +228,7 @@ function Account() {
             Log out
         </button>
         
+        {/* Details popup */}
         { showPopup && 
             <div className="Popup-Container" style={{display: showPopup ? 'flex' : 'none'}}>
                 <div className="Popup" onClick={null}>
@@ -206,9 +236,67 @@ function Account() {
                         <div className="Popup-Title">{currNickname} - {currCourier}</div>
                         <button className="Popup-Close" onClick={() => setShowPopup(false)}>x</button>
                     </header>
+
                     <div className="Popup-Content">
-                        <div className="Tracking-raw-output" style={{fontSize: 10}}>{trackingRawResponse}</div>
+
+                        {/* Detail tables */} 
+                        <div className="Tracking-output-div">
+                            <p className="Tracking-header">Origin: {trackingOrigin}</p>
+                            <p className="Tracking-header">Destination: {trackingDestination}</p>
+
+                            {currCourier=="DHL" &&
+                                <div className="Tracking-status-table">
+                                    <table style={{borderSpacing: 0, border: "2px solid white"}}>
+                                        <thead>
+                                            <tr>
+                                                <th style={{borderRight: "2px solid white"}} className="Tracking-status-table-header">Date (UTC)</th>
+                                                <th style={{borderRight: "2px solid white"}} className="Tracking-status-table-header">Location</th>
+                                                <th className="Tracking-status-table-header">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {trackingEvents && trackingEvents.map((event, index) =>
+                                                <tr key={index}>
+                                                    <td className="Tracking-status-table-cell">{event.timestamp}</td>
+                                                    <td className="Tracking-status-table-cell">{event.location.address.addressLocality}</td>
+                                                    <td className="Tracking-status-table-cell">{event.description}</td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+
+                            {currCourier=="FedEx" &&
+                                <div className="Tracking-status-table">
+                                    <table style={{borderSpacing: 0, border: "2px solid white"}}>
+                                        <thead>
+                                            <tr>
+                                                <th style={{borderRight: "2px solid white"}} className="Tracking-status-table-header">Date (UTC)</th>
+                                                <th className="Tracking-status-table-header">Status</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            {trackingEvents && trackingEvents.map((dateAndTimes, index) =>
+                                            <tr key={index}>
+                                                <td className="Tracking-status-table-cell">{dateAndTimes.dateTime}</td>
+                                                <td className="Tracking-status-table-cell">{dateAndTimes.type}</td>
+                                            </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                        </div>
                     </div>
+
+                    {/* Raw output of tracking number response
+                        <div className="Popup-Content">
+                            <div className="Tracking-raw-output" style={{fontSize: 10}}>{trackingRawResponse}</div>
+                        </div>
+                    */}
+                    
 
                     {/* Not yet implemented - delete tracking number from account
 

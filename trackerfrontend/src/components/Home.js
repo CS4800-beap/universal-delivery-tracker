@@ -38,6 +38,8 @@ function Home() {
     function getTracking(event) {
         event.preventDefault()
         
+        setTrackingInputMessage("Loading...")
+
         setTrackingResponseValid(false);
         setShowSavePrompt(false);
         setShowSavedPrompt(false);
@@ -79,25 +81,26 @@ function Home() {
                         if (response.data === "") { // Not sure why, but this works
                             throw new Error("Failed to track")
                         } else {
-                            // setTrackingOrigin()
-                            setTrackingOrigin(response.data.shipments[0].origin.address.addressLocality);
-                            // setTrackingDestination()
-                            setTrackingDestination(response.data.shipments[0].destination.address.addressLocality);
-                            // setTrackingEvents()
-                            setTrackingEvents(response.data.shipments[0].events);
-                            // console.log(response.data.shipments[0].events)
+                            try {
+                                setTrackingOrigin(response.data.shipments[0].origin.address.addressLocality);
+                                setTrackingDestination(response.data.shipments[0].destination.address.addressLocality);
+                                setTrackingEvents(response.data.shipments[0].events);
+                            } catch (error) {
+                                setTrackingResponseDataValid(false)
+                                throw new Error(error)
+                            }
                         }
                     // FedEx selected
                     } else if (courierSubmit === "FedEx") {
-                        // setTrackingOrigin()
-                        setTrackingOrigin(response.data.output.completeTrackResults[0].trackResults[0].originLocation.locationContactAndAddress.address.city);
-                        // setTrackingDestination(response.data.output.completeTrackResults[0].trackResults[0].deliveryDetails.actualDeliveryAddress.city); // This is from deliveryDetails
-                        // setTrackingDestination()
-                        setTrackingDestination(response.data.output.completeTrackResults[0].trackResults[0].lastUpdatedDestinationAddress.city);  // This is from lastUpdatedDestinationAddress
-                        // console.log(response.data.output.completeTrackResults[0].trackResults[0].dateAndTimes)
-                        // setTrackingEvents()
-                        setTrackingEvents(response.data.output.completeTrackResults[0].trackResults[0].dateAndTimes);
-                        // setTrackingInputMessage("FedEx is currently not supported.");
+                        try {
+                            setTrackingOrigin(response.data.output.completeTrackResults[0].trackResults[0].originLocation.locationContactAndAddress.address.city);
+                            setTrackingDestination(response.data.output.completeTrackResults[0].trackResults[0].lastUpdatedDestinationAddress.city);  // This is from lastUpdatedDestinationAddress
+                            setTrackingEvents(response.data.output.completeTrackResults[0].trackResults[0].dateAndTimes);
+                        } catch (error) {
+                            setTrackingResponseDataValid(false)
+                            throw new Error(error)
+                        }
+                        
                     // USPS selected
                     } else if (courierSubmit === "USPS") {
                         setTrackingInputMessage("USPS is currently not supported.")
@@ -232,6 +235,8 @@ function Home() {
         
         var courierSubmit = courier
 
+        setSavedPrompt("Saving...")
+
         // Call API to to attempt to save tracking number
         axios.get("http://localhost:8080/addTrackingNumber?token=" + token + "&trackingNumber=" + trackingNumber + "&nickname=" + nickname + "&courier=" + courierSubmit)
             .then(response => {
@@ -298,6 +303,8 @@ function Home() {
                 }
             </div>
             
+
+            {/* Output tables */}
             {(trackingResponseValid) &&
                 <div className="Tracking-output-div">
                     <p className="Tracking-header">Origin: {trackingOrigin}</p>
