@@ -60,7 +60,7 @@ function Account() {
   function loadTrackingNumbers(token) {
     axios.get("http://localhost:8080/getTrackingNumbers?token=" + token)
         .then(response => {
-            console.log(response.data)
+            // console.log(response.data)
             
             // Parse response to fill table
             var nicknameArr = []
@@ -96,7 +96,7 @@ function Account() {
     setCurrNickname(nickname)
     setCurrCourier(courier)
     setCurrTrackingNum(trackingNum)
-    console.log("tracking: ", trackingNum, " from ", courier)
+    //console.log("tracking: ", trackingNum, " from ", courier)
     
     // Call tracking API
     axios.get("http://localhost:8080/track?tn=" + trackingNum + "&courier=" + courier)
@@ -106,7 +106,7 @@ function Account() {
             }
             
             // Tracking number is valid
-            console.log(response.data)
+            //console.log(response.data)
             
             //setTrackingRawResponse(response.data)
             
@@ -143,13 +143,14 @@ function Account() {
             Your Account
         </h1>
 
+        {/* Not yet implemented - display user's name
+
         <div className="user-name">
             TODO: user-name show here
         </div>
 
-        <button className="Logout-button" onClick={logout} style={{margin: '4vh'}}>
-            Log out
-        </button>
+        */}
+
 
         <div className="Tracking-status-table">
             <table style={{borderSpacing: 0, border: "2px solid white"}}>
@@ -184,11 +185,19 @@ function Account() {
             </table>
         </div>
 
+        {/* Not yet implemented - delete tracking number from account
+
         <div className="delete button">
             <button className="Delete-all-button" onClick={deleteAll}>
                 Delete all
             </button> 
         </div>
+
+        */}
+
+        <button className="Logout-button" onClick={logout} style={{margin: '4vh'}}>
+            Log out
+        </button>
         
         { showPopup && 
             <div className="Popup-Container" style={{display: showPopup ? 'flex' : 'none'}}>
@@ -200,9 +209,14 @@ function Account() {
                     <div className="Popup-Content">
                         <div className="Tracking-raw-output" style={{fontSize: 10}}>{trackingRawResponse}</div>
                     </div>
+
+                    {/* Not yet implemented - delete tracking number from account
+
                     <div className="Popup-Footer">
                         <button className="Delete-button" onClick={deleteButton}>Delete</button>
                     </div>
+
+                    */}
                 </div>
             </div>
         }

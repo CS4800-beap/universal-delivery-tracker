@@ -20,6 +20,7 @@ function Signup() {
 
     const navigate = useNavigate();
     const toAccount = useCallback(() => navigate('/account', {replace: false}), [navigate]);
+    const toLogin = useCallback(() => navigate('/login', {replace: false}), [navigate]);
 
     // Detect enter key press
     function handleEnterKeyPress(event) {
@@ -69,23 +70,17 @@ function Signup() {
         } else {
             axios.get("http://localhost:8080/signup?emailid=" + email + "&password=" + password + "&fname=" + firstName + "&lname=" + lastName)
                 .then(function(response) {
-                    if (response.data !== "true") {
+                    console.log(response.data)
+                    if (response.data !== true) {
                         setSignupErrorMessage("Failed to create account.")
                         return
                     }
 
-                    // Check if user has opted into remember me and store token accordingly
-                    if (rememberMeChecked) {
-                        localStorage.setItem("token", response.data)
-                    } else {
-                        sessionStorage.setItem("token", response.data)
-                    }
-
-                    toAccount()
+                    toLogin()
                 })
                 .catch (error => {
                     console.error(error.response.data.error)
-                    setSignupErrorMessage("An unexpected error has occurred. Unable to login.")
+                    setSignupErrorMessage("An unexpected error has occurred. Unable to signup.")
                 })
         }
     }
@@ -117,10 +112,14 @@ function Signup() {
                     
                     <div className="Form-text" style={{fontSize: 15, color: '#ff4337', fontWeight: 'bold'}}>{signupErrorMessage}</div>
 
+                    {/* Not currently being used
+
                     <div>
                         <div className="Form-text" style={{display: 'inline-block', fontSize: 18, marginRight: 7}}>Remember Me </div>
                         <input type="checkbox" checked={rememberMeChecked} onChange={handleChange} />
                     </div>
+
+                    */}
 
                     <div className="Form-text" style={{fontSize: 18}}>Already have an account? <Link to='/login' style={{color: "white"}}>Log in</Link></div>
                 

@@ -24,7 +24,6 @@ function Home() {
     const [showSavePrompt, setShowSavePrompt] = useState(false);
     const [savedPrompt, setSavedPrompt] = useState("");
     const [showSavedPrompt, setShowSavedPrompt] = useState(false);
-    const [nickname, setNickname] = useState("");
 
     // Detect enter key press
     function handleEnterKeyPress(event) {
@@ -42,6 +41,24 @@ function Home() {
 
         // Check if the user entered a valid tracking number
         if (trackingNumber.length > 0) {
+
+            // TEMP CODE: dont run API call if unsupported courier is selected
+            if (courier === "USPS") {
+                setTrackingInputMessage("USPS is currently not supported.")
+                console.log("USPS is currently not supported.")
+                return
+            // UPS selected
+            } else if (courier === "UPS") {
+                setTrackingInputMessage("UPS is currently not supported.")
+                console.log("UPS is currently not supported.")
+                return
+            }// No specific courier selected
+            else if (courier === "Select a courier") {
+                setTrackingInputMessage("Please select a courier.")
+                console.log("No courier selected.")
+                return
+            }
+
             axios.get("http://localhost:8080/track?tn=" + trackingNumber + "&courier=" + courier)
                 .then((response) => {
                     if (response.data === "failed to track") {
@@ -74,13 +91,13 @@ function Home() {
                         // setTrackingInputMessage("FedEx is currently not supported.");
                     // USPS selected
                     } else if (courier === "USPS") {
-                        setTrackingInputMessage("USPS is currently not supported.");
+                        setTrackingInputMessage("USPS is currently not supported.")
                     // UPS selected
                     } else if (courier === "UPS") {
                         setTrackingInputMessage("UPS is currently not supported.")
                     }// No specific courier selected
                     else if (courier === "Select a courier") {
-                        setTrackingInputMessage("Please select a courier.");
+                        setTrackingInputMessage("Please select a courier.")
                     }
                     
                     // Tracking number is valid
@@ -193,13 +210,10 @@ function Home() {
 
     // Attempt to save tracking number when logged in
     function addTrackingNumber(event) {
-
-        var nickName = prompt('Enter a nickname for the package.')
-        if (nickName === null || nickName === '')
-            nickName = 'No package name'
-        setNickname(nickName)
-
         event.preventDefault();
+
+        var nickname = prompt('Enter a nickname for the package.')
+
 
         var token = "";
         if (localStorage.getItem("token") !== null) {
@@ -208,10 +222,11 @@ function Home() {
             token = sessionStorage.getItem("token");
         }
         
+
         // Call API to to attempt to save tracking number
         axios.get("http://localhost:8080/addTrackingNumber?token=" + token + "&trackingNumber=" + trackingNumber + "&nickname=" + nickname + "&courier=" + courier)
             .then(response => {
-                console.log(response.data)
+                // console.log(response.data)
                 if (response.data === "success") {
                     setSavedPrompt("Tracking number saved successfully.");
                 } else {
