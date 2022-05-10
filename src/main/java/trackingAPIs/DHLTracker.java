@@ -1,6 +1,8 @@
 package trackingAPIs;
 
 import http.ParameterStringBuilder;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -51,7 +53,16 @@ public class DHLTracker implements TrackingApiInterface {
             content.append(inputLine);
         }
         in.close();
-
         return content.toString();
+    }
+
+    public String getMostRecentUpdateFromJson(String json) throws IOException{
+        JSONObject object = new JSONObject(json);
+        JSONArray shipments = object.getJSONArray("shipments");
+        JSONObject shipment = shipments.getJSONObject(0);
+        JSONArray events = shipment.getJSONArray("events");
+
+        JSONObject event = events.getJSONObject(0);
+        return event.getString("description");
     }
 }

@@ -1,6 +1,7 @@
 package trackingAPIs;
 
 import com.squareup.okhttp.*;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -73,5 +74,17 @@ public class FedExTracker implements TrackingApiInterface{
     private static String getOAuthKey(String json){
         JSONObject jsonObject = new JSONObject(json);
         return jsonObject.getString("access_token");
+    }
+
+    public String getMostRecentUpdateFromJson(String json){
+        JSONObject object = new JSONObject(json);
+        JSONObject output = object.getJSONObject("output");
+        JSONArray completeTrackResults = output.getJSONArray("completeTrackResults");
+        JSONObject temp = completeTrackResults.getJSONObject(0);
+        JSONArray trackResults = temp.getJSONArray("trackResults");
+        JSONObject trackResults1 = trackResults.getJSONObject(0);
+        JSONArray scanEvents = trackResults1.getJSONArray("scanEvents");
+        JSONObject event = scanEvents.getJSONObject(0);
+        return event.getString("eventDescription");
     }
 }

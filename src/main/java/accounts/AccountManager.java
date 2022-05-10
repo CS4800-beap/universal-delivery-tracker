@@ -60,7 +60,7 @@ public class AccountManager {
     }
 
     public List<String> getTrackingDetailsFromEmail(String email){
-        String sql = "SELECT * FROM tracking_numbers WHERE email = \"" + email + "\";";
+        String sql = "SELECT * FROM tracking_numbers WHERE username = \"" + email + "\";";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(SpringJDBCConfig.getMysqlDataSource());
         List<String> trackingNumbers = jdbcTemplate.query(sql, new TrackingNumbersMapper());
 

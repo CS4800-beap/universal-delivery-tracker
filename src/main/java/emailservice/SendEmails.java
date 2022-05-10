@@ -19,7 +19,7 @@ public class SendEmails{
             message.setSubject(subject);
 
             MimeBodyPart mimeBodyPart = new MimeBodyPart();
-            mimeBodyPart.setContent(msg, "text/html; charset=utf-8");
+            mimeBodyPart.setContent(msg, "text/plain; charset=utf-8");
 
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(mimeBodyPart);
