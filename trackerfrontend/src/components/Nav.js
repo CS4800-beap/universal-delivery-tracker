@@ -12,7 +12,12 @@ function Nav() {
             <img src={logo} alt="Logo"/>
           </Link>
         </h3>
-        <ul className="Nav-items">
+        <ul className="Nav-items1">
+          <li>
+              <Link className="Nav-item" to="/" >Home</Link>
+          </li>
+        </ul>
+        <ul className="Nav-items2">
             <li>
               <Link className="Nav-item" to="/about">About</Link>
             </li>

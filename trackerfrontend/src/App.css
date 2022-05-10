@@ -20,7 +20,15 @@ nav {
   color: white;
 }
 
-.Nav-items {
+.Nav-items1 {
+  width: 0%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  list-style: none;
+}
+
+.Nav-items2 {
   width: 80%;
   display: flex;
   justify-content: flex-end;
