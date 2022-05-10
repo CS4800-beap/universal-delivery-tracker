@@ -48,7 +48,7 @@ function Signup() {
         }
 
         // Validate token
-        axios.get("http://localhost:8080/validateToken?token=" + token)
+        axios.get("http://ec2-54-85-97-52.compute-1.amazonaws.com/validateToken?token=" + token)
             .then(response => {
                 if (response.data) {
                     toAccount()
@@ -68,7 +68,7 @@ function Signup() {
         } else if (password !== confirmPassword) {
             setSignupErrorMessage("Passwords do not match.")
         } else {
-            axios.get("http://localhost:8080/signup?emailid=" + email + "&password=" + password + "&fname=" + firstName + "&lname=" + lastName)
+            axios.get("http://ec2-54-85-97-52.compute-1.amazonaws.com/signup?emailid=" + email + "&password=" + password + "&fname=" + firstName + "&lname=" + lastName)
                 .then(function(response) {
                     console.log(response.data)
                     if (response.data !== true) {

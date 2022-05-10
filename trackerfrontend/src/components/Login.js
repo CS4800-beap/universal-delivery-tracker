@@ -41,7 +41,7 @@ function Login() {
         }
         
         // Validate token
-        axios.get("http://localhost:8080/validateToken?token=" + token)
+        axios.get("http://ec2-54-85-97-52.compute-1.amazonaws.com/validateToken?token=" + token)
             .then(response => {
                 if (response.data) {
                     toAccount()
@@ -59,7 +59,7 @@ function Login() {
         if (email.length < 1 || password.length < 1) {
             setLoginErrorMessage("Please fill in all fields.")
         } else {
-            axios.get("http://localhost:8080/login?emailid=" + email + "&password=" + password)
+            axios.get("http://ec2-54-85-97-52.compute-1.amazonaws.com/login?emailid=" + email + "&password=" + password)
             .then(response => {
                 if (response.data === "User Not Found") {
                     setLoginErrorMessage("Account or Password Incorrect.")

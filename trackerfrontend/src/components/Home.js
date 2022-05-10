@@ -70,7 +70,7 @@ function Home() {
                 return
             }
 
-            axios.get("http://localhost:8080/track?tn=" + trackingNumber + "&courier=" + courierSubmit)
+            axios.get("http://ec2-54-85-97-52.compute-1.amazonaws.com/track?tn=" + trackingNumber + "&courier=" + courierSubmit)
                 .then((response) => {
                     if (response.data === "failed to track") {
                         throw new Error("Failed to track")
@@ -220,7 +220,7 @@ function Home() {
         }
 
         // Validate token
-        axios.get("http://localhost:8080/validateToken?token=" + token)
+        axios.get("http://ec2-54-85-97-52.compute-1.amazonaws.com/validateToken?token=" + token)
             .then(response => {
                 if (response.data) {
                     // Ask user if they want to save the tracking number
@@ -252,7 +252,7 @@ function Home() {
         setSavedPrompt("Saving...")
 
         // Call API to to attempt to save tracking number
-        axios.get("http://localhost:8080/addTrackingNumber?token=" + token + "&trackingNumber=" + trackingNumber + "&nickname=" + nickname + "&courier=" + courierSubmit)
+        axios.get("http://ec2-54-85-97-52.compute-1.amazonaws.com/addTrackingNumber?token=" + token + "&trackingNumber=" + trackingNumber + "&nickname=" + nickname + "&courier=" + courierSubmit)
             .then(response => {
                 // console.log(response.data)
                 if (response.data === "success") {

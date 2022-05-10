@@ -43,7 +43,7 @@ function Account() {
     }
     
     // Validate token
-    axios.get("http://localhost:8080/validateToken?token=" + token)
+    axios.get("http://ec2-54-85-97-52.compute-1.amazonaws.com/validateToken?token=" + token)
         .then(response => {
             if (!response.data) {
                 toLogin()
@@ -62,7 +62,7 @@ function Account() {
   }
 
   function loadTrackingNumbers(token) {
-    axios.get("http://localhost:8080/getTrackingNumbers?token=" + token)
+    axios.get("http://ec2-54-85-97-52.compute-1.amazonaws.com/getTrackingNumbers?token=" + token)
         .then(response => {
             // console.log(response.data)
             
@@ -104,7 +104,7 @@ function Account() {
     //console.log(trackingEvents)
 
     // Call tracking API
-    axios.get("http://localhost:8080/track?tn=" + trackingNum + "&courier=" + courier)
+    axios.get("http://ec2-54-85-97-52.compute-1.amazonaws.com/track?tn=" + trackingNum + "&courier=" + courier)
         .then((response) => {
             if (response === "failed to track") {
                 throw new Error("Failed to track")
