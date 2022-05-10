@@ -76,6 +76,8 @@ function Home() {
                         throw new Error("Failed to track")
                     }
 
+                    console.log(JSON.stringify(response, null, 4))
+
                     // TODO: PARSE DATA FROM RESPONSE ------- WIP
                     if (courierSubmit === "DHL") {
                         if (response.data === "") { // Not sure why, but this works
@@ -83,7 +85,9 @@ function Home() {
                         } else {
                             try {
                                 setTrackingOrigin(response.data.shipments[0].origin.address.addressLocality);
+
                                 setTrackingDestination(response.data.shipments[0].destination.address.addressLocality);
+
                                 setTrackingEvents(response.data.shipments[0].events);
                             } catch (error) {
                                 setTrackingResponseDataValid(false)
@@ -94,7 +98,17 @@ function Home() {
                     } else if (courierSubmit === "FedEx") {
                         try {
                             setTrackingOrigin(response.data.output.completeTrackResults[0].trackResults[0].originLocation.locationContactAndAddress.address.city);
-                            setTrackingDestination(response.data.output.completeTrackResults[0].trackResults[0].lastUpdatedDestinationAddress.city);  // This is from lastUpdatedDestinationAddress
+                            
+                            var trackDest = ""
+                            if (response.data.output.completeTrackResults[0].trackResults[0].lastUpdatedDestinationAddress != null) {
+                                trackDest = response.data.output.completeTrackResults[0].trackResults[0].lastUpdatedDestinationAddress.city
+                            } else if (response.data.output.completeTrackResults[0].trackResults[0].destinationLocation != null) {
+                                trackDest = response.data.output.completeTrackResults[0].trackResults[0].destinationLocation.locationContactAndAddress.address.city
+                            } else {
+                                throw new Error()
+                            }
+                            setTrackingDestination(trackDest);  // This is from lastUpdatedDestinationAddress
+                            
                             setTrackingEvents(response.data.output.completeTrackResults[0].trackResults[0].dateAndTimes);
                         } catch (error) {
                             setTrackingResponseDataValid(false)
