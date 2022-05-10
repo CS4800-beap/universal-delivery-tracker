@@ -1,8 +1,8 @@
 package accounts;
 
+import emailservice.SendEmails;
 import exceptions.AccountExceptions.InvalidIDException;
 import exceptions.TokenExceptions.TokenExpiredException;
-import io.jsonwebtoken.Jwt;
 import jdbc.SpringJDBCConfig;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -34,6 +34,10 @@ public class AccountManager {
         String sql = "INSERT INTO users (username, email, password, first_name, last_name) VALUES (?, ?, ?, ?, ?);";
 
         int result = jdbcTemplate.update(sql, username, email, pwd, fname, lname);
+
+        if(result > 0){
+            SendEmails.sendTextMail(email, "Congratulations, your account with Universal Delivery Tracker has been successfully created.", "Account Confirmation");
+        }
         return result > 0;
     }
 
